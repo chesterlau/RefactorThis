@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using ProductManagement.Contracts.Models;
 using ProductManagement.Data.Repositories;
+using System.Threading.Tasks;
 
 namespace ProductManagement.Core.Services
 {
@@ -17,11 +18,11 @@ namespace ProductManagement.Core.Services
 			_logger = logger;
 		}
 
-		public Products GetAllProducts()
+		public async Task<Products> GetAllProducts()
 		{
 			_logger.LogInformation($"Getting all products");
 
-			var products = _productRepository.GetAllProducts();
+			var products = await _productRepository.GetAllProducts();
 			return products;
 		}
 	}

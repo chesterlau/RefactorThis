@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using ProductManagement.Contracts.Models;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ProductManagement.Data.Repositories
 {
@@ -18,7 +19,7 @@ namespace ProductManagement.Data.Repositories
 			_logger = logger;
 		}
 
-		public Products GetAllProducts()
+		public async Task<Products> GetAllProducts()
 		{
 			_logger.LogInformation($"Getting all products from the database");
 
@@ -28,12 +29,12 @@ namespace ProductManagement.Data.Repositories
 			};
 
 			var conn = _sqliteConnection;
-			conn.Open();
+			await conn.OpenAsync();
 			var cmd = conn.CreateCommand();
 			cmd.CommandText = $"select * from Products";
 
-			var rdr = cmd.ExecuteReader();
-			while (rdr.Read())
+			var rdr = await cmd.ExecuteReaderAsync();
+			while (await rdr.ReadAsync())
 			{
 				products.Items.Add(
 					new Product
@@ -46,6 +47,8 @@ namespace ProductManagement.Data.Repositories
 					}
 				);
 			}
+
+			await conn.CloseAsync();
 
 			return products;
 		}

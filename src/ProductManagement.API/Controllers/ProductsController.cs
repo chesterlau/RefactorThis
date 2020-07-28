@@ -29,7 +29,7 @@ namespace ProductManagement.API.Controllers
             try
             {
                 _logger.LogInformation($"[GET] /Products");
-                var products = _productService.GetAllProducts();
+                var products = await _productService.GetAllProducts();
 
                 return Ok(products);
             }
@@ -46,15 +46,15 @@ namespace ProductManagement.API.Controllers
         //    return new Products();
         //}
 
-        //[HttpGet("{id}")]
-        //public Product Get(Guid id)
-        //{
-        //    var product = new Product(id);
-        //    if (product.IsNew)
-        //        throw new Exception();
+        [HttpGet("{id}")]
+        public Product Get(Guid id)
+        {
+            var product = new Product(id);
+            if (product.IsNew)
+                throw new Exception();
 
-        //    return product;
-        //}
+            return product;
+        }
 
         //[HttpPost]
         //public void Post(Product product)

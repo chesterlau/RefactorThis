@@ -1,9 +1,10 @@
 ﻿using ProductManagement.Contracts.Models;
+using System.Threading.Tasks;
 
 namespace ProductManagement.Data.Repositories
 {
 	public interface IProductRepository
 	{
-		Products GetAllProducts();
+		Task<Products> GetAllProducts();
 	}
 }
