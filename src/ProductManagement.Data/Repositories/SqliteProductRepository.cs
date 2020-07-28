@@ -11,12 +11,10 @@ namespace ProductManagement.Data.Repositories
     {
         //TODO put in IConfiguration
         private const string ConnectionString = "Data Source=App_Data/products.db";
-        private readonly SqliteConnection _sqliteConnection;
         private readonly ILogger<SqliteProductRepository> _logger;
 
         public SqliteProductRepository(ILogger<SqliteProductRepository> logger)
         {
-            _sqliteConnection = new SqliteConnection(ConnectionString);
             _logger = logger;
         }
 
@@ -26,27 +24,28 @@ namespace ProductManagement.Data.Repositories
 
             var products = new List<Product>();
 
-            var conn = _sqliteConnection;
-            await conn.OpenAsync();
-            var cmd = conn.CreateCommand();
-            cmd.CommandText = $"select * from Products";
-
-            var rdr = await cmd.ExecuteReaderAsync();
-            while (await rdr.ReadAsync())
+            using(var conn = CreateConnection())
             {
-                products.Add(
-                    new Product
-                    {
-                        Id = Guid.Parse(rdr["Id"].ToString()),
-                        Name = rdr["Name"].ToString(),
-                        Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(),
-                        Price = decimal.Parse(rdr["Price"].ToString()),
-                        DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString())
-                    }
-                );
-            }
+                await conn.OpenAsync();
 
-            await conn.CloseAsync();
+                var cmd = conn.CreateCommand();
+                cmd.CommandText = $"select * from Products";
+
+                var rdr = await cmd.ExecuteReaderAsync();
+                while (await rdr.ReadAsync())
+                {
+                    products.Add(
+                        new Product
+                        {
+                            Id = Guid.Parse(rdr["Id"].ToString()),
+                            Name = rdr["Name"].ToString(),
+                            Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(),
+                            Price = decimal.Parse(rdr["Price"].ToString()),
+                            DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString())
+                        }
+                    );
+                }
+            }
 
             return products;
         }
@@ -55,27 +54,26 @@ namespace ProductManagement.Data.Repositories
         {
             _logger.LogInformation($"Getting product from database with where filter column: {column} and value: {value}");
 
-            var conn = _sqliteConnection;
-            await conn.OpenAsync();
-            var cmd = conn.CreateCommand();
+            Product product = new Product();
 
-            cmd.CommandText = $"select * from Products where {column} = '{value}' collate nocase";
-
-            var rdr = await cmd.ExecuteReaderAsync();
-
-            if (!await rdr.ReadAsync())
-                return null;
-
-            var product = new Product
+            using (var conn = CreateConnection())
             {
-                Id = Guid.Parse(rdr["Id"].ToString()),
-                Name = rdr["Name"].ToString(),
-                Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(),
-                Price = decimal.Parse(rdr["Price"].ToString()),
-                DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString())
-            };
+                await conn.OpenAsync();
+                var cmd = conn.CreateCommand();
 
-            await conn.CloseAsync();
+                cmd.CommandText = $"select * from Products where {column} = '{value}' collate nocase";
+
+                var rdr = await cmd.ExecuteReaderAsync();
+
+                if (!await rdr.ReadAsync())
+                    return null;
+
+                product.Id = Guid.Parse(rdr["Id"].ToString());
+                product.Name = rdr["Name"].ToString();
+                product.Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString();
+                product.Price = decimal.Parse(rdr["Price"].ToString());
+                product.DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString());
+            }
 
             return product;
         }
@@ -86,28 +84,28 @@ namespace ProductManagement.Data.Repositories
 
             var products = new List<Product>();
 
-            var conn = _sqliteConnection;
-            await conn.OpenAsync();
-            var cmd = conn.CreateCommand();
-
-            cmd.CommandText = $"select * from Products where lower({column}) like '%{value.ToString().ToLower()}%'";
-
-            var rdr = await cmd.ExecuteReaderAsync();
-            while (await rdr.ReadAsync())
+            using (var conn = CreateConnection())
             {
-                products.Add(
-                    new Product
-                    {
-                        Id = Guid.Parse(rdr["Id"].ToString()),
-                        Name = rdr["Name"].ToString(),
-                        Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(),
-                        Price = decimal.Parse(rdr["Price"].ToString()),
-                        DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString())
-                    }
-                );
-            }
+                await conn.OpenAsync();
+                var cmd = conn.CreateCommand();
 
-            await conn.CloseAsync();
+                cmd.CommandText = $"select * from Products where lower({column}) like '%{value.ToString().ToLower()}%'";
+
+                var rdr = await cmd.ExecuteReaderAsync();
+                while (await rdr.ReadAsync())
+                {
+                    products.Add(
+                        new Product
+                        {
+                            Id = Guid.Parse(rdr["Id"].ToString()),
+                            Name = rdr["Name"].ToString(),
+                            Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(),
+                            Price = decimal.Parse(rdr["Price"].ToString()),
+                            DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString())
+                        }
+                    );
+                }
+            }
 
             return products;
         }
@@ -116,15 +114,17 @@ namespace ProductManagement.Data.Repositories
         {
             _logger.LogInformation($"Creating a product in the database");
 
-            var conn = _sqliteConnection;
-            await conn.OpenAsync();
-            var cmd = conn.CreateCommand();
+            int rowsAdded = 0;
+            using (var conn = CreateConnection())
+            {
+                await conn.OpenAsync();
+                var cmd = conn.CreateCommand();
 
-            cmd.CommandText = $"insert into Products (id, name, description, price, deliveryprice) values ('{product.Id}', '{product.Name}', '{product.Description}', {product.Price}, {product.DeliveryPrice})";
+                cmd.CommandText = $"insert into Products (id, name, description, price, deliveryprice) values ('{product.Id}', '{product.Name}', '{product.Description}', {product.Price}, {product.DeliveryPrice})";
 
-            await conn.OpenAsync();
-            var rowsAdded = await cmd.ExecuteNonQueryAsync();
-            await conn.CloseAsync();
+                await conn.OpenAsync();
+                rowsAdded = await cmd.ExecuteNonQueryAsync();
+            }
 
             return rowsAdded > 0;
         }
@@ -133,17 +133,24 @@ namespace ProductManagement.Data.Repositories
         {
             _logger.LogInformation($"Updating a product in the database");
 
-            var conn = _sqliteConnection;
-            await conn.OpenAsync();
-            var cmd = conn.CreateCommand();
+            int rowsUpdated = 0;
+            using (var conn = CreateConnection())
+            {
+                await conn.OpenAsync();
+                var cmd = conn.CreateCommand();
 
-            cmd.CommandText = $"update Products set name = '{product.Name}', description = '{product.Description}', price = {product.Price}, deliveryprice = {product.DeliveryPrice} where id = '{product.Id}' collate nocase";
+                cmd.CommandText = $"update Products set name = '{product.Name}', description = '{product.Description}', price = {product.Price}, deliveryprice = {product.DeliveryPrice} where id = '{product.Id}' collate nocase";
 
-            await conn.OpenAsync();
-            var rowsUpdated = await cmd.ExecuteNonQueryAsync();
-            await conn.CloseAsync();
+                await conn.OpenAsync();
+                rowsUpdated = await cmd.ExecuteNonQueryAsync();
+            }
 
             return rowsUpdated > 0;
+        }
+
+        private SqliteConnection CreateConnection()
+        {
+            return new SqliteConnection(ConnectionString);
         }
     }
 }
