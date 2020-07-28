@@ -9,5 +9,6 @@ namespace ProductManagement.Data.Repositories
 		Task<List<Product>> GetAllProducts();
 		Task<Product> GetProductByWhereFilter(string column, object value);
 		Task<List<Product>> GetProductsByLikeFilter(string column, object value);
+		Task<bool> CreateProduct(Product product);
 	}
 }

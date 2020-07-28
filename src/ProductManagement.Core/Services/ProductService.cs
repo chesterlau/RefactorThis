@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using ProductManagement.Contracts.Dto;
 using ProductManagement.Contracts.Models;
 using ProductManagement.Data.Repositories;
@@ -41,6 +42,8 @@ namespace ProductManagement.Core.Services
                 Items = products
             };
 
+            _logger.LogInformation($"Retrieved {products.Count} products");
+
             return getAllProductsResponse;
         }
 
@@ -52,6 +55,7 @@ namespace ProductManagement.Core.Services
 
             if(product == null)
             {
+                _logger.LogInformation($"No product with id: {id} found");
                 return null;
             }
 
@@ -65,6 +69,31 @@ namespace ProductManagement.Core.Services
             };
             
             return getProductByIdResponse;
+        }
+
+        public async Task<CreateProductResponse> CreateProduct(CreateProductRequest createProductRequest)
+        {
+            _logger.LogInformation($"Creating a product: {JsonConvert.SerializeObject(createProductRequest)}");
+
+            Product product = new Product
+            {
+                Id = Guid.NewGuid(),
+                DeliveryPrice = createProductRequest.DeliveryPrice,
+                Description = createProductRequest.Description,
+                Price = createProductRequest.Price,
+                Name = createProductRequest.Name
+            };
+
+            var result = await _productRepository.CreateProduct(product);
+
+            var createProductResponse = new CreateProductResponse
+            { 
+                IsSuccessful = result
+            };
+            
+            _logger.LogInformation($"Creating a product with IsSuccessful: {createProductResponse.IsSuccessful}");
+
+            return createProductResponse;
         }
     }
 }

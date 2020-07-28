@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using ProductManagement.Contracts.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ProductManagement.Data.Repositories
@@ -112,5 +111,23 @@ namespace ProductManagement.Data.Repositories
 
             return products;
         }
+
+        public async Task<bool> CreateProduct(Product product)
+        {
+            _logger.LogInformation($"Creating a product in the database");
+
+            var conn = _sqliteConnection;
+            await conn.OpenAsync();
+            var cmd = conn.CreateCommand();
+
+            cmd.CommandText = $"insert into Products (id, name, description, price, deliveryprice) values ('{product.Id}', '{product.Name}', '{product.Description}', {product.Price}, {product.DeliveryPrice})";
+
+            await conn.OpenAsync();
+            var rowsAdded = await cmd.ExecuteNonQueryAsync();
+            await conn.CloseAsync();
+
+            return rowsAdded > 0;
+        }
+
     }
 }

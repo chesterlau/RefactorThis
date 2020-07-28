@@ -60,6 +60,26 @@ namespace ProductManagement.API.Controllers
             }
         }
 
+        [HttpPost("/api/Products/")]
+        [ProducesResponseType(typeof(CreateProductResponse), 200)]
+        [ProducesResponseType(typeof(ApiResult), 400)]
+        public async Task<IActionResult> Post(CreateProductRequest createProductRequest)
+        {
+            try
+            {
+                _logger.LogInformation($"[POST] /Products");
+
+                var result = await _productService.CreateProduct(createProductRequest);
+
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception caught!");
+                return BadRequest(new ApiResult { Title = "An error has occured" });
+            }
+        }
+
         ////done
         //[HttpGet]
         //public Products Get()
@@ -78,6 +98,7 @@ namespace ProductManagement.API.Controllers
         //    return product;
         //}
 
+        ////done
         //[HttpPost]
         //public void Post(Product product)
         //{

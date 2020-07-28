@@ -9,5 +9,7 @@ namespace ProductManagement.Core.Services
         Task<GetAllProductsResponse> GetAllProductsWithOptionalNameFilter(string name);
 
         Task<GetProductByIdResponse> GetProductById(Guid id);
+
+        Task<CreateProductResponse> CreateProduct(CreateProductRequest createProductRequest);
     }
 }
