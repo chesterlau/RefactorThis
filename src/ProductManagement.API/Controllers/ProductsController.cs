@@ -24,13 +24,13 @@ namespace ProductManagement.API.Controllers
         [HttpGet("/api/Products")]
         [ProducesResponseType(typeof(GetAllProductsResponse), 200)]
         [ProducesResponseType(typeof(ApiResult), 400)]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] string name)
         {
             try
             {
                 _logger.LogInformation($"[GET] /Products");
-                var result = await _productService.GetAllProducts();
 
+                var result = await _productService.GetAllProductsWithOptionalNameFilter(name);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -53,20 +53,22 @@ namespace ProductManagement.API.Controllers
 
                 return Ok(result);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception caught!");
                 return BadRequest(new ApiResult { Title = "An error has occured" });
             }
         }
 
-        //[HttpGet] (Done)
+        ////done
+        //[HttpGet]
         //public Products Get()
         //{
         //    return new Products();
         //}
 
-        //[HttpGet("{id}")] (Done)
+        ////done
+        //[HttpGet("{id}")]
         //public Product Get(Guid id)
         //{
         //    var product = new Product(id);

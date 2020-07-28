@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using ProductManagement.Contracts.Models;
 using System;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace ProductManagement.Data.Repositories
@@ -53,7 +54,7 @@ namespace ProductManagement.Data.Repositories
 
         public async Task<Product> GetProductByWhereFilter(string column, object value)
         {
-            _logger.LogInformation($"Getting products from database with filter");
+            _logger.LogInformation($"Getting product from database with where filter column: {column} and value: {value}");
 
             var conn = _sqliteConnection;
             await conn.OpenAsync();
@@ -68,7 +69,6 @@ namespace ProductManagement.Data.Repositories
 
             var product = new Product
             {
-
                 Id = Guid.Parse(rdr["Id"].ToString()),
                 Name = rdr["Name"].ToString(),
                 Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(),
@@ -79,6 +79,38 @@ namespace ProductManagement.Data.Repositories
             await conn.CloseAsync();
 
             return product;
+        }
+
+        public async Task<List<Product>> GetProductsByLikeFilter(string column, object value)
+        {
+            _logger.LogInformation($"Getting products from database with like filter column: {column} and value: {value}");
+
+            var products = new List<Product>();
+
+            var conn = _sqliteConnection;
+            await conn.OpenAsync();
+            var cmd = conn.CreateCommand();
+
+            cmd.CommandText = $"select * from Products where lower({column}) like '%{value.ToString().ToLower()}%'";
+
+            var rdr = await cmd.ExecuteReaderAsync();
+            while (await rdr.ReadAsync())
+            {
+                products.Add(
+                    new Product
+                    {
+                        Id = Guid.Parse(rdr["Id"].ToString()),
+                        Name = rdr["Name"].ToString(),
+                        Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(),
+                        Price = decimal.Parse(rdr["Price"].ToString()),
+                        DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString())
+                    }
+                );
+            }
+
+            await conn.CloseAsync();
+
+            return products;
         }
     }
 }

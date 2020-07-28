@@ -3,6 +3,7 @@ using ProductManagement.Contracts.Dto;
 using ProductManagement.Contracts.Models;
 using ProductManagement.Data.Repositories;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace ProductManagement.Core.Services
@@ -20,11 +21,20 @@ namespace ProductManagement.Core.Services
             _logger = logger;
         }
 
-        public async Task<GetAllProductsResponse> GetAllProducts()
+        public async Task<GetAllProductsResponse> GetAllProductsWithOptionalNameFilter(string name)
         {
-            _logger.LogInformation($"Getting all products");
+            _logger.LogInformation($"Getting all products with name filter: {name}");
 
-            var products = await _productRepository.GetAllProducts();
+            List<Product> products;
+
+            if(string.IsNullOrEmpty(name))
+            {
+                products = await _productRepository.GetAllProducts();
+            }
+            else
+            {
+                products = await _productRepository.GetProductsByLikeFilter("Name", name);
+            }
 
             GetAllProductsResponse getAllProductsResponse = new GetAllProductsResponse
             {
@@ -36,7 +46,7 @@ namespace ProductManagement.Core.Services
 
         public async Task<GetProductByIdResponse> GetProductById(Guid id)
         {
-            _logger.LogInformation($"Getting all products by id: {id}");
+            _logger.LogInformation($"Getting product by id: {id}");
 
             var product = await _productRepository.GetProductByWhereFilter("Id", id);
 
