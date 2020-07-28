@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ProductManagement.Core.Services;
+using ProductManagement.Data.Repositories;
 using Serilog;
 using System;
 using System.IO;
@@ -23,6 +25,9 @@ namespace ProductManagement.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddTransient<IProductRepository, SqliteProductRepository>();
+            services.AddTransient<IProductService, ProductService>();
 
             services.AddSwaggerGen(c =>
             {

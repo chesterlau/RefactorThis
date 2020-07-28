@@ -19,7 +19,6 @@
     <ItemGroup>
       <ProjectReference Include="..\ProductManagement.Contracts\ProductManagement.Contracts.csproj" />
       <ProjectReference Include="..\ProductManagement.Core\ProductManagement.Core.csproj" />
-      <ProjectReference Include="..\ProductManagement.Data\ProductManagement.Data.csproj" />
     </ItemGroup>
 
 </Project>
