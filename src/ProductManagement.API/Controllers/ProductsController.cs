@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using RefactorThis.Models;
+using ProductManagement.API.Models;
 
-namespace RefactorThis.Controllers
+namespace ProductManagement.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -5,7 +5,7 @@ using Serilog;
 using Serilog.Events;
 using System.IO;
 
-namespace RefactorThis
+namespace ProductManagement.API
 {
 	public class Program
     {

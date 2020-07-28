@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace RefactorThis.Models
+namespace ProductManagement.API.Models
 {
     public class Products
     {

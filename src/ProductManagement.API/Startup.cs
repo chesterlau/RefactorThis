@@ -8,7 +8,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace RefactorThis
+namespace ProductManagement.API
 {
     public class Startup
     {
@@ -29,7 +29,7 @@ namespace RefactorThis
                 c.SwaggerDoc("v1",
                     new Microsoft.OpenApi.Models.OpenApiInfo
                     {
-                        Title = "Product API",
+                        Title = "Product Management API",
                         Version = "v1"
                     });
 
@@ -57,7 +57,7 @@ namespace RefactorThis
             );
 
             app.UseSwagger();
-            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Product API V1"); });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "Product Management API V1"); });
 
             app.UseEndpoints(endpoints =>
             {
