@@ -7,50 +7,78 @@ using System.Threading.Tasks;
 
 namespace ProductManagement.Data.Repositories
 {
-	public class SqliteProductRepository : IProductRepository
-	{
-		private const string ConnectionString = "Data Source=App_Data/products.db";
-		private readonly SqliteConnection _sqliteConnection;
-		private readonly ILogger<SqliteProductRepository> _logger;
+    public class SqliteProductRepository : IProductRepository
+    {
+        //TODO put in IConfiguration
+        private const string ConnectionString = "Data Source=App_Data/products.db";
+        private readonly SqliteConnection _sqliteConnection;
+        private readonly ILogger<SqliteProductRepository> _logger;
 
-		public SqliteProductRepository(ILogger<SqliteProductRepository> logger)
-		{
-			_sqliteConnection = new SqliteConnection(ConnectionString);
-			_logger = logger;
-		}
+        public SqliteProductRepository(ILogger<SqliteProductRepository> logger)
+        {
+            _sqliteConnection = new SqliteConnection(ConnectionString);
+            _logger = logger;
+        }
 
-		public async Task<Products> GetAllProducts()
-		{
-			_logger.LogInformation($"Getting all products from the database");
+        public async Task<List<Product>> GetAllProducts()
+        {
+            _logger.LogInformation($"Getting all products from the database");
 
-			Products products = new Products
-			{
-				Items = new List<Product>()
-			};
+            var products = new List<Product>();
 
-			var conn = _sqliteConnection;
-			await conn.OpenAsync();
-			var cmd = conn.CreateCommand();
-			cmd.CommandText = $"select * from Products";
+            var conn = _sqliteConnection;
+            await conn.OpenAsync();
+            var cmd = conn.CreateCommand();
+            cmd.CommandText = $"select * from Products";
 
-			var rdr = await cmd.ExecuteReaderAsync();
-			while (await rdr.ReadAsync())
-			{
-				products.Items.Add(
-					new Product
-					{
-						Id = Guid.Parse(rdr["Id"].ToString()),
-						Name = rdr["Name"].ToString(),
-						Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(),
-						Price = decimal.Parse(rdr["Price"].ToString()),
-						DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString())
-					}
-				);
-			}
+            var rdr = await cmd.ExecuteReaderAsync();
+            while (await rdr.ReadAsync())
+            {
+                products.Add(
+                    new Product
+                    {
+                        Id = Guid.Parse(rdr["Id"].ToString()),
+                        Name = rdr["Name"].ToString(),
+                        Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(),
+                        Price = decimal.Parse(rdr["Price"].ToString()),
+                        DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString())
+                    }
+                );
+            }
 
-			await conn.CloseAsync();
+            await conn.CloseAsync();
 
-			return products;
-		}
-	}
+            return products;
+        }
+
+        public async Task<Product> GetProductByWhereFilter(string column, object value)
+        {
+            _logger.LogInformation($"Getting products from database with filter");
+
+            var conn = _sqliteConnection;
+            await conn.OpenAsync();
+            var cmd = conn.CreateCommand();
+
+            cmd.CommandText = $"select * from Products where {column} = '{value}' collate nocase";
+
+            var rdr = await cmd.ExecuteReaderAsync();
+
+            if (!await rdr.ReadAsync())
+                return null;
+
+            var product = new Product
+            {
+
+                Id = Guid.Parse(rdr["Id"].ToString()),
+                Name = rdr["Name"].ToString(),
+                Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString(),
+                Price = decimal.Parse(rdr["Price"].ToString()),
+                DeliveryPrice = decimal.Parse(rdr["DeliveryPrice"].ToString())
+            };
+
+            await conn.CloseAsync();
+
+            return product;
+        }
+    }
 }

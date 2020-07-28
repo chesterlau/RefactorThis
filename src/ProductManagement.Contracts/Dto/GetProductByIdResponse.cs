@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace ProductManagement.Contracts.Models
+namespace ProductManagement.Contracts.Dto
 {
-    public class Product
+    public class GetProductByIdResponse
     {
         public Guid Id { get; set; }
 

@@ -21,19 +21,39 @@ namespace ProductManagement.API.Controllers
             _productService = productService;
         }
 
-        [HttpGet]
-        [ProducesResponseType(typeof(ProductManagement.Contracts.Models.Products), 200)]
+        [HttpGet("/api/Products")]
+        [ProducesResponseType(typeof(GetAllProductsResponse), 200)]
         [ProducesResponseType(typeof(ApiResult), 400)]
         public async Task<IActionResult> Get()
         {
             try
             {
                 _logger.LogInformation($"[GET] /Products");
-                var products = await _productService.GetAllProducts();
+                var result = await _productService.GetAllProducts();
 
-                return Ok(products);
+                return Ok(result);
             }
             catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception caught!");
+                return BadRequest(new ApiResult { Title = "An error has occured" });
+            }
+        }
+
+        [HttpGet("/api/Products/{id}")]
+        [ProducesResponseType(typeof(GetProductByIdResponse), 200)]
+        [ProducesResponseType(typeof(ApiResult), 400)]
+        public async Task<IActionResult> Get(Guid id)
+        {
+            try
+            {
+                _logger.LogInformation($"[GET] /Products/{id}");
+
+                var result = await _productService.GetProductById(id);
+
+                return Ok(result);
+            }
+            catch(Exception ex)
             {
                 _logger.LogError(ex, "Exception caught!");
                 return BadRequest(new ApiResult { Title = "An error has occured" });
@@ -46,15 +66,15 @@ namespace ProductManagement.API.Controllers
         //    return new Products();
         //}
 
-        [HttpGet("{id}")]
-        public Product Get(Guid id)
-        {
-            var product = new Product(id);
-            if (product.IsNew)
-                throw new Exception();
+        //[HttpGet("{id}")] (Done)
+        //public Product Get(Guid id)
+        //{
+        //    var product = new Product(id);
+        //    if (product.IsNew)
+        //        throw new Exception();
 
-            return product;
-        }
+        //    return product;
+        //}
 
         //[HttpPost]
         //public void Post(Product product)
