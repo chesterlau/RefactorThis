@@ -11,5 +11,6 @@ namespace ProductManagement.Core.Services
         Task<GetProductByIdResponse> GetProductById(Guid id);
 
         Task<CreateProductResponse> CreateProduct(CreateProductRequest createProductRequest);
+        Task<UpdateProductResponse> UpdateProduct(Guid id, UpdateProductRequest updateProductRequest);
     }
 }

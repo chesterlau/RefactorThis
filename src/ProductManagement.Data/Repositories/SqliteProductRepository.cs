@@ -129,5 +129,21 @@ namespace ProductManagement.Data.Repositories
             return rowsAdded > 0;
         }
 
+        public async Task<bool> UpdateProduct(Product product)
+        {
+            _logger.LogInformation($"Updating a product in the database");
+
+            var conn = _sqliteConnection;
+            await conn.OpenAsync();
+            var cmd = conn.CreateCommand();
+
+            cmd.CommandText = $"update Products set name = '{product.Name}', description = '{product.Description}', price = {product.Price}, deliveryprice = {product.DeliveryPrice} where id = '{product.Id}' collate nocase";
+
+            await conn.OpenAsync();
+            var rowsUpdated = await cmd.ExecuteNonQueryAsync();
+            await conn.CloseAsync();
+
+            return rowsUpdated > 0;
+        }
     }
 }

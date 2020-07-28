@@ -50,7 +50,6 @@ namespace ProductManagement.API.Controllers
                 _logger.LogInformation($"[GET] /Products/{id}");
 
                 var result = await _productService.GetProductById(id);
-
                 return Ok(result);
             }
             catch (Exception ex)
@@ -63,14 +62,32 @@ namespace ProductManagement.API.Controllers
         [HttpPost("/api/Products/")]
         [ProducesResponseType(typeof(CreateProductResponse), 200)]
         [ProducesResponseType(typeof(ApiResult), 400)]
-        public async Task<IActionResult> Post(CreateProductRequest createProductRequest)
+        public async Task<IActionResult> Post([FromBody] CreateProductRequest createProductRequest)
         {
             try
             {
                 _logger.LogInformation($"[POST] /Products");
 
                 var result = await _productService.CreateProduct(createProductRequest);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception caught!");
+                return BadRequest(new ApiResult { Title = "An error has occured" });
+            }
+        }
 
+        [HttpPut("/api/Products/{id}")]
+        [ProducesResponseType(typeof(UpdateProductResponse), 200)]
+        [ProducesResponseType(typeof(ApiResult), 400)]
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProductRequest updateProductRequest)
+        {
+            try
+            {
+                _logger.LogInformation($"[Put] /Products/{id}");
+
+                var result = await _productService.UpdateProduct(id, updateProductRequest);
                 return Ok(result);
             }
             catch (Exception ex)

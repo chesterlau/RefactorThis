@@ -5,6 +5,7 @@ using ProductManagement.Contracts.Models;
 using ProductManagement.Data.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace ProductManagement.Core.Services
@@ -91,9 +92,42 @@ namespace ProductManagement.Core.Services
                 IsSuccessful = result
             };
             
-            _logger.LogInformation($"Creating a product with IsSuccessful: {createProductResponse.IsSuccessful}");
+            _logger.LogInformation($"Created a product with IsSuccessful: {createProductResponse.IsSuccessful}");
 
             return createProductResponse;
+        }
+
+        public async Task<UpdateProductResponse> UpdateProduct(Guid id, UpdateProductRequest updateProductRequest)
+        {
+            _logger.LogInformation($"Updating product with id: {id}");
+
+            var product = await _productRepository.GetProductByWhereFilter("Id", id);
+
+            if(product == null)
+            {
+                _logger.LogInformation($"Could not find product with id: {id}");
+
+                return new UpdateProductResponse 
+                {
+                    IsSuccessful = false
+                };
+            }
+
+            product.Name = updateProductRequest.Name;
+            product.Description = updateProductRequest.Description;
+            product.Price = updateProductRequest.Price;
+            product.DeliveryPrice = updateProductRequest.DeliveryPrice;
+
+            var result = await _productRepository.UpdateProduct(product);
+
+            var updateProductResponse = new UpdateProductResponse
+            { 
+                IsSuccessful = result
+            };
+
+            _logger.LogInformation($"Updated a product with IsSuccessful: {updateProductResponse.IsSuccessful}");
+
+            return updateProductResponse;
         }
     }
 }
