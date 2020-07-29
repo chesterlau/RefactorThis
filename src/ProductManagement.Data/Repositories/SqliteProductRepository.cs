@@ -115,6 +115,8 @@ namespace ProductManagement.Data.Repositories
         {
             _logger.LogInformation($"Creating a product in the database");
 
+            product.Id = Guid.NewGuid();
+
             int rowsAdded = 0;
             using (var conn = CreateConnection())
             {
@@ -123,7 +125,6 @@ namespace ProductManagement.Data.Repositories
 
                 cmd.CommandText = $"insert into Products (id, name, description, price, deliveryprice) values ('{product.Id}', '{product.Name}', '{product.Description}', {product.Price}, {product.DeliveryPrice})";
 
-                await conn.OpenAsync();
                 rowsAdded = await cmd.ExecuteNonQueryAsync();
             }
 
@@ -142,7 +143,6 @@ namespace ProductManagement.Data.Repositories
 
                 cmd.CommandText = $"update Products set name = '{product.Name}', description = '{product.Description}', price = {product.Price}, deliveryprice = {product.DeliveryPrice} where id = '{product.Id}' collate nocase";
 
-                await conn.OpenAsync();
                 rowsUpdated = await cmd.ExecuteNonQueryAsync();
             }
 
@@ -211,6 +211,8 @@ namespace ProductManagement.Data.Repositories
         {
             _logger.LogInformation($"Creating a productOption in the database");
 
+            productOption.Id = Guid.NewGuid();
+
             int rowsAdded = 0;
             using (var conn = CreateConnection())
             {
@@ -219,7 +221,6 @@ namespace ProductManagement.Data.Repositories
 
                 cmd.CommandText = $"insert into productoptions (id, productid, name, description) values ('{productOption.Id}', '{productOption.ProductId}', '{productOption.Name}', '{productOption.Description}')";
 
-                await conn.OpenAsync();
                 rowsAdded = await cmd.ExecuteNonQueryAsync();
             }
 
@@ -238,7 +239,6 @@ namespace ProductManagement.Data.Repositories
 
                 cmd.CommandText = $"update productoptions set name = '{productOption.Name}', description = '{productOption.Description}' where id = '{productOption.Id}' collate nocase";
 
-                await conn.OpenAsync();
                 rowsUpdated = await cmd.ExecuteNonQueryAsync();
             }
 
@@ -257,7 +257,6 @@ namespace ProductManagement.Data.Repositories
 
                 cmd.CommandText = $"delete from productoptions where id = '{optionid}' collate nocase";
 
-                await conn.OpenAsync();
                 rowsDeleted = await cmd.ExecuteNonQueryAsync();
             }
 
@@ -276,11 +275,30 @@ namespace ProductManagement.Data.Repositories
 
                 cmd.CommandText = $"delete from Products where id = '{productId}' collate nocase";
 
-                await conn.OpenAsync();
                 rowsDeleted = await cmd.ExecuteNonQueryAsync();
             }
 
             return rowsDeleted > 0;
+        }
+
+        /// <summary>
+        /// Note that this is a destructive operation and it is only used for integration test cleanups
+        /// </summary>
+        public async Task DeleteAllData()
+        {
+            using (var conn = CreateConnection())
+            {
+                await conn.OpenAsync();
+                var cmd = conn.CreateCommand();
+
+                cmd.CommandText = $"delete from products";
+
+                await cmd.ExecuteNonQueryAsync();
+
+                cmd.CommandText = $"delete from productoptions";
+
+                await cmd.ExecuteNonQueryAsync();
+            }
         }
 
         private SqliteConnection CreateConnection()

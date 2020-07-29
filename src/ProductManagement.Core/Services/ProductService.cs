@@ -78,7 +78,6 @@ namespace ProductManagement.Core.Services
 
             Product product = new Product
             {
-                Id = Guid.NewGuid(),
                 DeliveryPrice = createProductRequest.DeliveryPrice,
                 Description = createProductRequest.Description,
                 Price = createProductRequest.Price,
@@ -182,7 +181,6 @@ namespace ProductManagement.Core.Services
 
             var productOption = new ProductOption
             {
-                Id = Guid.NewGuid(),
                 ProductId = productId,
                 Description = createProductOptionRequest.Description,
                 Name = createProductOptionRequest.Name
