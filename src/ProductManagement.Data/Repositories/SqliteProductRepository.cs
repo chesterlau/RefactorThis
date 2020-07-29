@@ -249,7 +249,7 @@ namespace ProductManagement.Data.Repositories
             return rowsUpdated > 0;
         }
 
-        public async Task<bool> DeleteProductOption(Guid id)
+        public async Task<bool> DeleteProductOption(Guid optionid)
         {
             _logger.LogInformation($"Deleting a product option in the database");
 
@@ -259,7 +259,26 @@ namespace ProductManagement.Data.Repositories
                 await conn.OpenAsync();
                 var cmd = conn.CreateCommand();
 
-                cmd.CommandText = $"delete from productoptions where id = '{id}' collate nocase";
+                cmd.CommandText = $"delete from productoptions where id = '{optionid}' collate nocase";
+
+                await conn.OpenAsync();
+                rowsDeleted = await cmd.ExecuteNonQueryAsync();
+            }
+
+            return rowsDeleted > 0;
+        }
+
+        public async Task<bool> DeleteProduct(Guid productId)
+        {
+            _logger.LogInformation($"Deleting a product in the database");
+
+            int rowsDeleted = 0;
+            using (var conn = CreateConnection())
+            {
+                await conn.OpenAsync();
+                var cmd = conn.CreateCommand();
+
+                cmd.CommandText = $"delete from Products where id = '{productId}' collate nocase";
 
                 await conn.OpenAsync();
                 rowsDeleted = await cmd.ExecuteNonQueryAsync();

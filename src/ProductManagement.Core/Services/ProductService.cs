@@ -255,5 +255,34 @@ namespace ProductManagement.Core.Services
             return deleteProductOptionResponse;
         }
 
+        public async Task<DeleteProductResponse> DeleteProduct(Guid productId)
+        {
+            _logger.LogInformation($"Deleting a product with productId: {productId}");
+
+            var productOptions = await _productRepository.GetProductOptionsByProductId(productId);
+
+            foreach(var productOption in productOptions)
+            {
+                var deleteProductOptionResult = await _productRepository.DeleteProductOption(productOption.Id);
+
+                if(!deleteProductOptionResult)
+                {
+                    _logger.LogWarning($"Fail to delete product option with optionId: {productOption.Id} and productId: {productOption.ProductId}");
+                }
+                else
+                {
+                    _logger.LogInformation($"Delete product option with optionId: {productOption.Id} and productId: {productOption.ProductId}");
+                }
+            }
+
+            var deletionProductResult = await _productRepository.DeleteProduct(productId);
+
+            var deleteProductResponse = new DeleteProductResponse
+            {
+                IsSuccessful = deletionProductResult
+            };
+
+            return deleteProductResponse;
+        }
     }
 }

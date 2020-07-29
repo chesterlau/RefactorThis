@@ -192,6 +192,25 @@ namespace ProductManagement.API.Controllers
             }
         }
 
+        [HttpDelete("/api/products/{id}")]
+        [ProducesResponseType(typeof(DeleteProductResponse), 200)]
+        [ProducesResponseType(typeof(ApiResult), 400)]
+        public async Task<IActionResult> DeleteProduct(Guid id)
+        {
+            try
+            {
+                _logger.LogInformation($"[DELETE] /products/{id}");
+
+                var result = await _productService.DeleteProduct(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception caught!");
+                return BadRequest(new ApiResult { Title = "An error has occured" });
+            }
+        }
+
         ////done
         //[HttpGet]
         //public Products Get()
@@ -233,6 +252,7 @@ namespace ProductManagement.API.Controllers
         //        orig.Save();
         //}
 
+        ////done
         //[HttpDelete("{id}")]
         //public void Delete(Guid id)
         //{
