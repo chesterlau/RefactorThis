@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace ProjectManagement.Integration.Tests.Data
+namespace ProjectManagement.Integration.Tests.Repositories
 {
     public class SqliteProductRepositoryIntegrationTests : IDisposable
     {
