@@ -21,7 +21,7 @@ namespace ProductManagement.API.Controllers
             _productService = productService;
         }
 
-        [HttpGet("/api/Products")]
+        [HttpGet("/api/products")]
         [ProducesResponseType(typeof(GetAllProductsResponse), 200)]
         [ProducesResponseType(typeof(ApiResult), 400)]
         public async Task<IActionResult> GetProducts([FromQuery] string name)
@@ -40,7 +40,7 @@ namespace ProductManagement.API.Controllers
             }
         }
 
-        [HttpGet("/api/Products/{id}")]
+        [HttpGet("/api/products/{id}")]
         [ProducesResponseType(typeof(GetProductByIdResponse), 200)]
         [ProducesResponseType(typeof(ApiResult), 400)]
         public async Task<IActionResult> GetProductById(Guid id)
@@ -59,7 +59,7 @@ namespace ProductManagement.API.Controllers
             }
         }
 
-        [HttpPost("/api/Products/")]
+        [HttpPost("/api/products/")]
         [ProducesResponseType(typeof(CreateProductResponse), 200)]
         [ProducesResponseType(typeof(ApiResult), 400)]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest createProductRequest)
@@ -78,7 +78,7 @@ namespace ProductManagement.API.Controllers
             }
         }
 
-        [HttpPut("/api/Products/{id}")]
+        [HttpPut("/api/products/{id}")]
         [ProducesResponseType(typeof(UpdateProductResponse), 200)]
         [ProducesResponseType(typeof(ApiResult), 400)]
         public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductRequest updateProductRequest)
@@ -97,7 +97,7 @@ namespace ProductManagement.API.Controllers
             }
         }
 
-        [HttpGet("/api/Products/{id}/options")]
+        [HttpGet("/api/products/{id}/options")]
         [ProducesResponseType(typeof(GetProductOptionsByProductIdResponse), 200)]
         [ProducesResponseType(typeof(ApiResult), 400)]
         public async Task<IActionResult> GetProductOptionsByProductId(Guid id)
@@ -116,7 +116,7 @@ namespace ProductManagement.API.Controllers
             }
         }
 
-        [HttpGet("/api/Products/{id}/options/{optionId}")]
+        [HttpGet("/api/products/{id}/options/{optionId}")]
         [ProducesResponseType(typeof(GetProductOptionsByProductIdAndOptionsIdResponse), 200)]
         [ProducesResponseType(typeof(ApiResult), 400)]
         public async Task<IActionResult> GetProductOptionsByProductId(Guid id, Guid optionId)
@@ -126,6 +126,25 @@ namespace ProductManagement.API.Controllers
                 _logger.LogInformation($"[GET] /api/Products/{id}/options/{optionId}");
 
                 var result = await _productService.GetProductOptionsByProductIdAndOptionsId(id, optionId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception caught!");
+                return BadRequest(new ApiResult { Title = "An error has occured" });
+            }
+        }
+
+        [HttpPost("/api/products/{id}/options")]
+        [ProducesResponseType(typeof(CreateProductOptionResponse), 200)]
+        [ProducesResponseType(typeof(ApiResult), 400)]
+        public async Task<IActionResult> CreateProductOption(Guid id, [FromBody] CreateProductOptionRequest createProductOptionRequest)
+        {
+            try
+            {
+                _logger.LogInformation($"[POST] /Products/{id}/options");
+
+                var result = await _productService.CreateProductOption(id, createProductOptionRequest);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -200,7 +219,8 @@ namespace ProductManagement.API.Controllers
 
         //    return option;
         //}
-
+        
+        ////done
         //[HttpPost("{productId}/options")]
         //public void CreateOption(Guid productId, ProductOption option)
         //{

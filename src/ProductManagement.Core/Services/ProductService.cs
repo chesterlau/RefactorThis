@@ -52,7 +52,7 @@ namespace ProductManagement.Core.Services
         {
             _logger.LogInformation($"Getting product by id: {id}");
 
-            var product = await _productRepository.GetProductByWhereFilter("Id", id);
+            var product = await _productRepository.GetProductById(id);
 
             if(product == null)
             {
@@ -101,7 +101,7 @@ namespace ProductManagement.Core.Services
         {
             _logger.LogInformation($"Updating product with id: {id}");
 
-            var product = await _productRepository.GetProductByWhereFilter("Id", id);
+            var product = await _productRepository.GetProductById(id);
 
             if(product == null)
             {
@@ -165,6 +165,40 @@ namespace ProductManagement.Core.Services
             };
 
             return getProductOptionsByProductIdAndOptionsIdResponse;
+        }
+
+        public async Task<CreateProductOptionResponse> CreateProductOption(Guid productId, CreateProductOptionRequest createProductOptionRequest)
+        {
+            _logger.LogInformation($"Creating a product: {JsonConvert.SerializeObject(createProductOptionRequest)}");
+
+
+            //Find the product first
+            var product = await _productRepository.GetProductById(productId);
+
+            if(product == null)
+            {
+                _logger.LogInformation($"No product with id: {productId} found. Can't add product to product option.");
+                return new CreateProductOptionResponse { IsSuccessful = false };
+            }
+
+            var productOption = new ProductOption
+            {
+                Id = Guid.NewGuid(),
+                ProductId = productId,
+                Description = createProductOptionRequest.Description,
+                Name = createProductOptionRequest.Name
+            };
+
+            var result = await _productRepository.CreateProductOption(productOption);
+
+            var createProductOptionResponse = new CreateProductOptionResponse
+            {
+                IsSuccessful = result
+            };
+
+            _logger.LogInformation($"Created a product option with IsSuccessful: {createProductOptionResponse.IsSuccessful}");
+
+            return createProductOptionResponse;
         }
     }
 }

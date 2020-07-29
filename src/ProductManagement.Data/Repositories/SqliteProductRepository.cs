@@ -50,9 +50,9 @@ namespace ProductManagement.Data.Repositories
             return products;
         }
 
-        public async Task<Product> GetProductByWhereFilter(string column, object value)
+        public async Task<Product> GetProductById(Guid id)
         {
-            _logger.LogInformation($"Getting product from database with where filter column: {column} and value: {value}");
+            _logger.LogInformation($"Getting product by id from database");
 
             Product product = new Product();
 
@@ -61,7 +61,7 @@ namespace ProductManagement.Data.Repositories
                 await conn.OpenAsync();
                 var cmd = conn.CreateCommand();
 
-                cmd.CommandText = $"select * from Products where {column} = '{value}' collate nocase";
+                cmd.CommandText = $"select * from Products where id = '{id}' collate nocase";
 
                 var rdr = await cmd.ExecuteReaderAsync();
 
@@ -209,6 +209,25 @@ namespace ProductManagement.Data.Repositories
         private SqliteConnection CreateConnection()
         {
             return new SqliteConnection(ConnectionString);
+        }
+
+        public async Task<bool> CreateProductOption(ProductOption productOption)
+        {
+            _logger.LogInformation($"Creating a productOption in the database");
+
+            int rowsAdded = 0;
+            using (var conn = CreateConnection())
+            {
+                await conn.OpenAsync();
+                var cmd = conn.CreateCommand();
+
+                cmd.CommandText = $"insert into productoptions (id, productid, name, description) values ('{productOption.Id}', '{productOption.ProductId}', '{productOption.Name}', '{productOption.Description}')";
+
+                await conn.OpenAsync();
+                rowsAdded = await cmd.ExecuteNonQueryAsync();
+            }
+
+            return rowsAdded > 0;
         }
     }
 }
