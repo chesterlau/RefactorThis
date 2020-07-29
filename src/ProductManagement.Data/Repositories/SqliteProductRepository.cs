@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.Sqlite;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using ProductManagement.Contracts.Models;
 using System;
@@ -9,13 +10,13 @@ namespace ProductManagement.Data.Repositories
 {
     public class SqliteProductRepository : IProductRepository
     {
-        //TODO put in IConfiguration
-        private const string ConnectionString = "Data Source=App_Data/products.db";
         private readonly ILogger<SqliteProductRepository> _logger;
+        private readonly IConfiguration _configuration;
 
-        public SqliteProductRepository(ILogger<SqliteProductRepository> logger)
+        public SqliteProductRepository(IConfiguration configuration, ILogger<SqliteProductRepository> logger)
         {
             _logger = logger;
+            _configuration = configuration;
         }
 
         public async Task<List<Product>> GetAllProducts()
@@ -206,11 +207,6 @@ namespace ProductManagement.Data.Repositories
             return productOption;
         }
 
-        private SqliteConnection CreateConnection()
-        {
-            return new SqliteConnection(ConnectionString);
-        }
-
         public async Task<bool> CreateProductOption(ProductOption productOption)
         {
             _logger.LogInformation($"Creating a productOption in the database");
@@ -285,6 +281,11 @@ namespace ProductManagement.Data.Repositories
             }
 
             return rowsDeleted > 0;
+        }
+
+        private SqliteConnection CreateConnection()
+        {
+            return new SqliteConnection(_configuration["ConnectionString"]);
         }
     }
 }
