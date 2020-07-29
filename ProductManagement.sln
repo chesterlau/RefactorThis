@@ -15,6 +15,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectManagement.Integrati
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManagement.Core.Tests", "tests\ProductManagement.Core.Tests\ProductManagement.Core.Tests.csproj", "{DC1AD88E-D28C-4E39-A7CE-56E74927D674}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{06E598EE-D34A-4DED-A43B-B42D3539901F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{4B3CCA3E-55F7-4DAE-AB79-F066A3A67723}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +52,14 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{529176B5-F038-4745-A9B8-E87E9D226F6C} = {4B3CCA3E-55F7-4DAE-AB79-F066A3A67723}
+		{C17CD394-019A-447D-AF4D-7C337361B0A8} = {4B3CCA3E-55F7-4DAE-AB79-F066A3A67723}
+		{1B004550-30CE-4A21-8C55-48E637498BCC} = {4B3CCA3E-55F7-4DAE-AB79-F066A3A67723}
+		{523AD222-3832-48A7-BE20-EE4D7B2ADAEA} = {4B3CCA3E-55F7-4DAE-AB79-F066A3A67723}
+		{7CFA8990-35D4-4233-9C3B-39B2110297F4} = {06E598EE-D34A-4DED-A43B-B42D3539901F}
+		{DC1AD88E-D28C-4E39-A7CE-56E74927D674} = {06E598EE-D34A-4DED-A43B-B42D3539901F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {034C5D3E-D848-4AD9-867D-B425A0CFF664}
