@@ -5,7 +5,6 @@ using ProductManagement.Contracts.Models;
 using ProductManagement.Data.Repositories;
 using System;
 using System.Collections.Generic;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace ProductManagement.Core.Services
