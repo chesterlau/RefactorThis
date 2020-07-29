@@ -129,5 +129,21 @@ namespace ProductManagement.Core.Services
 
             return updateProductResponse;
         }
+
+        public async Task<GetProductOptionsByProductIdResponse> GetProductOptionsByProductId(Guid id)
+        {
+            _logger.LogInformation($"Getting product options by product id: {id}");
+
+            var productOptions = await _productRepository.GetProductOptionsByProductId(id);
+
+            var getProductOptionsByProductIdResponse = new GetProductOptionsByProductIdResponse
+            {
+                Items = productOptions
+            };
+
+            _logger.LogInformation($"Retrieved {productOptions.Count} product options");
+
+            return getProductOptionsByProductIdResponse;
+        }
     }
 }

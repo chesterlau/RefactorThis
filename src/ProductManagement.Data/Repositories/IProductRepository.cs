@@ -1,4 +1,5 @@
 ﻿using ProductManagement.Contracts.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -11,5 +12,6 @@ namespace ProductManagement.Data.Repositories
 		Task<List<Product>> GetProductsByLikeFilter(string column, object value);
 		Task<bool> CreateProduct(Product product);
 		Task<bool> UpdateProduct(Product product);
+		Task<List<ProductOption>> GetProductOptionsByProductId(Guid productId);
 	}
 }

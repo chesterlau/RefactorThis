@@ -148,6 +148,37 @@ namespace ProductManagement.Data.Repositories
             return rowsUpdated > 0;
         }
 
+        public async Task<List<ProductOption>> GetProductOptionsByProductId(Guid productId)
+        {
+            _logger.LogInformation($"Getting product options from the database");
+
+            var productOptions = new List<ProductOption>();
+
+            using (var conn = CreateConnection())
+            {
+                await conn.OpenAsync();
+                var cmd = conn.CreateCommand();
+
+                cmd.CommandText = $"select * from productoptions where productid = '{productId}' collate nocase";
+
+                var rdr = await cmd.ExecuteReaderAsync();
+                while (await rdr.ReadAsync())
+                {
+                    productOptions.Add(
+                        new ProductOption
+                        {
+                            Id = Guid.Parse(rdr["Id"].ToString()),
+                            ProductId = Guid.Parse(rdr["ProductId"].ToString()),
+                            Name = rdr["Name"].ToString(),
+                            Description = (DBNull.Value == rdr["Description"]) ? null : rdr["Description"].ToString()
+                        }
+                    );
+                }
+            }
+
+            return productOptions;
+        }
+
         private SqliteConnection CreateConnection()
         {
             return new SqliteConnection(ConnectionString);
