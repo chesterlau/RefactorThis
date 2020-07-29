@@ -16,5 +16,6 @@ namespace ProductManagement.Data.Repositories
 		Task<ProductOption> GetProductOptionsByProductIdAndOptionsId(Guid productId, Guid optionId);
 		Task<bool> CreateProductOption(ProductOption productOption);
 		Task<bool> UpdateProductOption(ProductOption productOption);
+		Task<bool> DeleteProductOption(Guid id);
 	}
 }

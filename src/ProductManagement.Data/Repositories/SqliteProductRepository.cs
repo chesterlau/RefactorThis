@@ -248,5 +248,24 @@ namespace ProductManagement.Data.Repositories
 
             return rowsUpdated > 0;
         }
+
+        public async Task<bool> DeleteProductOption(Guid id)
+        {
+            _logger.LogInformation($"Deleting a product option in the database");
+
+            int rowsDeleted = 0;
+            using (var conn = CreateConnection())
+            {
+                await conn.OpenAsync();
+                var cmd = conn.CreateCommand();
+
+                cmd.CommandText = $"delete from productoptions where id = '{id}' collate nocase";
+
+                await conn.OpenAsync();
+                rowsDeleted = await cmd.ExecuteNonQueryAsync();
+            }
+
+            return rowsDeleted > 0;
+        }
     }
 }

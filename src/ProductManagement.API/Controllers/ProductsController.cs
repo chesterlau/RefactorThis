@@ -173,6 +173,25 @@ namespace ProductManagement.API.Controllers
             }
         }
 
+        [HttpDelete("/api/products/{id}/options/{optionId}")]
+        [ProducesResponseType(typeof(DeleteProductOptionResponse), 200)]
+        [ProducesResponseType(typeof(ApiResult), 400)]
+        public async Task<IActionResult> DeleteProductOption(Guid id, Guid optionId)
+        {
+            try
+            {
+                _logger.LogInformation($"[DELETE] /products/{id}/options/{optionId}");
+
+                var result = await _productService.DeleteProductOption(id, optionId);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception caught!");
+                return BadRequest(new ApiResult { Title = "An error has occured" });
+            }
+        }
+
         ////done
         //[HttpGet]
         //public Products Get()
@@ -261,6 +280,7 @@ namespace ProductManagement.API.Controllers
         //        orig.Save();
         //}
 
+        ////done
         //[HttpDelete("{productId}/options/{id}")]
         //public void DeleteOption(Guid id)
         //{

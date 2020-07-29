@@ -230,5 +230,30 @@ namespace ProductManagement.Core.Services
 
             return updateProductOptionResponse;
         }
+
+        public async Task<DeleteProductOptionResponse> DeleteProductOption(Guid productId, Guid optionId)
+        {
+            var productOption = await _productRepository.GetProductOptionsByProductIdAndOptionsId(productId, optionId);
+
+            if(productOption == null)
+            {
+                _logger.LogInformation($"Could not find product option with productId: {productId} and optionId: {optionId}");
+
+                return new DeleteProductOptionResponse
+                {
+                    IsSuccessful = false
+                };
+            }
+
+            var result = await _productRepository.DeleteProductOption(optionId);
+
+            var deleteProductOptionResponse = new DeleteProductOptionResponse
+            {
+                IsSuccessful = result
+            };
+
+            return deleteProductOptionResponse;
+        }
+
     }
 }
