@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using ProductManagement.API.Middleware;
 using ProductManagement.Core.Services;
 using ProductManagement.Data.Repositories;
 using Serilog;
@@ -54,6 +55,8 @@ namespace ProductManagement.API
             app.UseRouting();
 
             app.UseSerilogRequestLogging();
+
+            app.UseMiddleware<LogContextMiddleware>();
 
             app.UseAuthorization();
 
