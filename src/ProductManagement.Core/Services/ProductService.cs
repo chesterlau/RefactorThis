@@ -35,7 +35,7 @@ namespace ProductManagement.Core.Services
             }
             else
             {
-                products = await _productRepository.GetProductsByLikeFilter("Name", name);
+                products = await _productRepository.GetProductsLikeName(name);
             }
 
             GetAllProductsResponse getAllProductsResponse = new GetAllProductsResponse

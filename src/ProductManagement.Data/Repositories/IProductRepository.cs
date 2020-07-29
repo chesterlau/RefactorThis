@@ -9,7 +9,7 @@ namespace ProductManagement.Data.Repositories
 	{
 		Task<List<Product>> GetAllProducts();
 		Task<Product> GetProductById(Guid id);
-		Task<List<Product>> GetProductsByLikeFilter(string column, object value);
+		Task<List<Product>> GetProductsLikeName(string productName);
 		Task<bool> CreateProduct(Product product);
 		Task<bool> UpdateProduct(Product product);
 		Task<List<ProductOption>> GetProductOptionsByProductId(Guid productId);

@@ -79,9 +79,9 @@ namespace ProductManagement.Data.Repositories
             return product;
         }
 
-        public async Task<List<Product>> GetProductsByLikeFilter(string column, object value)
+        public async Task<List<Product>> GetProductsLikeName(string productName)
         {
-            _logger.LogInformation($"Getting products from database with like filter column: {column} and value: {value}");
+            _logger.LogInformation($"Getting products from database with name like {productName}");
 
             var products = new List<Product>();
 
@@ -90,7 +90,7 @@ namespace ProductManagement.Data.Repositories
                 await conn.OpenAsync();
                 var cmd = conn.CreateCommand();
 
-                cmd.CommandText = $"select * from Products where lower({column}) like '%{value.ToString().ToLower()}%'";
+                cmd.CommandText = $"select * from Products where lower(name) like '%{productName}%'";
 
                 var rdr = await cmd.ExecuteReaderAsync();
                 while (await rdr.ReadAsync())
