@@ -225,6 +225,104 @@ namespace ProjectManagement.Integration.Tests.Data
             Assert.Equal(productOption2.Description, result[1].Description);
         }
 
+        [Fact]
+        public async Task GetProductOptionsByProductIdAndOptionsId_Returns_ProductOption_Correctly()
+        {
+            //Arrange
+            Mock<ILogger<SqliteProductRepository>> mockLogger = new Mock<ILogger<SqliteProductRepository>>();
+
+            SqliteProductRepository sqliteProductRepository = new SqliteProductRepository(BuildConfiguration(), mockLogger.Object);
+
+            ProductOption productOption1 = new ProductOption
+            {
+                Name = "Mac Red",
+                Description = "This is a Mac red",
+                ProductId = Guid.Parse("01234567-89ab-cdef-0123-456789abcdef")
+            };
+
+            ProductOption productOption2 = new ProductOption
+            {
+                Name = "Mac Blue",
+                Description = "This is a Mac blue",
+                ProductId = Guid.Parse("01234567-89ab-cdef-0123-456789abcdef")
+            };
+
+            await sqliteProductRepository.CreateProductOption(productOption1);
+            await sqliteProductRepository.CreateProductOption(productOption2);
+
+            var productOptions = await sqliteProductRepository.GetProductOptionsByProductId(Guid.Parse("01234567-89ab-cdef-0123-456789abcdef"));
+
+            //Act
+            var result = await sqliteProductRepository.GetProductOptionsByProductIdAndOptionsId(Guid.Parse("01234567-89ab-cdef-0123-456789abcdef"), productOptions[0].Id);
+
+            //Assert
+            Assert.Equal(productOption1.ProductId, result.ProductId);
+            Assert.Equal(productOption1.Name, result.Name);
+            Assert.Equal(productOption1.Description, result.Description);
+        }
+
+        [Fact]
+        public async Task UpdateProductOption_Updates_ProductOption_Correctly()
+        {
+            //Arrange
+            Mock<ILogger<SqliteProductRepository>> mockLogger = new Mock<ILogger<SqliteProductRepository>>();
+
+            SqliteProductRepository sqliteProductRepository = new SqliteProductRepository(BuildConfiguration(), mockLogger.Object);
+
+            ProductOption productOption1 = new ProductOption
+            {
+                Name = "Mac Red",
+                Description = "This is a Mac red",
+                ProductId = Guid.Parse("01234567-89ab-cdef-0123-456789abcdef")
+            };
+
+            await sqliteProductRepository.CreateProductOption(productOption1);
+            var productOptions = await sqliteProductRepository.GetProductOptionsByProductId(Guid.Parse("01234567-89ab-cdef-0123-456789abcdef"));
+
+            ProductOption updatedProductOption = new ProductOption
+            {
+                Id = productOptions[0].Id,
+                Name = "Updated red",
+                Description = "Updated desc",
+                ProductId = Guid.Parse("01234567-89ab-cdef-0123-456789abcdef")
+            };
+
+            //Act
+            await sqliteProductRepository.UpdateProductOption(updatedProductOption);
+            var result = await sqliteProductRepository.GetProductOptionsByProductId(Guid.Parse("01234567-89ab-cdef-0123-456789abcdef"));
+
+            //Assert
+            Assert.Equal(updatedProductOption.ProductId, result[0].ProductId);
+            Assert.Equal(updatedProductOption.Name, result[0].Name);
+            Assert.Equal(updatedProductOption.Description, result[0].Description);
+        }
+
+        [Fact]
+        public async Task DeleteProductOption_Deletes_ProductOption_Correctly()
+        {
+            //Arrange
+            Mock<ILogger<SqliteProductRepository>> mockLogger = new Mock<ILogger<SqliteProductRepository>>();
+
+            SqliteProductRepository sqliteProductRepository = new SqliteProductRepository(BuildConfiguration(), mockLogger.Object);
+
+            ProductOption productOption1 = new ProductOption
+            {
+                Name = "Mac Red",
+                Description = "This is a Mac red",
+                ProductId = Guid.Parse("01234567-89ab-cdef-0123-456789abcdef")
+            };
+
+            await sqliteProductRepository.CreateProductOption(productOption1);
+            var productOptions = await sqliteProductRepository.GetProductOptionsByProductId(Guid.Parse("01234567-89ab-cdef-0123-456789abcdef"));
+            
+            //Act
+            await sqliteProductRepository.DeleteProductOption(productOptions[0].Id);
+            var result = await sqliteProductRepository.GetProductOptionsByProductId(Guid.Parse("01234567-89ab-cdef-0123-456789abcdef"));
+
+            //Assert
+            Assert.Empty(result);
+        }
+
         public void Dispose()
         {
             Mock<ILogger<SqliteProductRepository>> mockLogger = new Mock<ILogger<SqliteProductRepository>>();
