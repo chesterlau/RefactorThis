@@ -171,7 +171,6 @@ namespace ProductManagement.Core.Services
         {
             _logger.LogInformation($"Creating a product: {JsonConvert.SerializeObject(createProductOptionRequest)}");
 
-
             //Find the product first
             var product = await _productRepository.GetProductById(productId);
 
@@ -199,6 +198,37 @@ namespace ProductManagement.Core.Services
             _logger.LogInformation($"Created a product option with IsSuccessful: {createProductOptionResponse.IsSuccessful}");
 
             return createProductOptionResponse;
+        }
+
+        public async Task<UpdateProductOptionResponse> UpdateProductOption(Guid productId, Guid optionId, UpdateProductOptionRequest updateProductOptionRequest)
+        {
+            _logger.LogInformation($"Updating product option with productId: {productId} and optionId: {optionId}");
+
+            var productOption = await _productRepository.GetProductOptionsByProductIdAndOptionsId(productId, optionId);
+
+            if (productOption == null)
+            {
+                _logger.LogInformation($"Could not find product option with productId: {productId} and optionId: {optionId}");
+
+                return new UpdateProductOptionResponse
+                {
+                    IsSuccessful = false
+                };
+            }
+
+            productOption.Name = updateProductOptionRequest.Name;
+            productOption.Description = updateProductOptionRequest.Description;
+
+            var result = await _productRepository.UpdateProductOption(productOption);
+
+            var updateProductOptionResponse = new UpdateProductOptionResponse
+            {
+                IsSuccessful = result
+            };
+
+            _logger.LogInformation($"Updated a product with IsSuccessful: {updateProductOptionResponse.IsSuccessful}");
+
+            return updateProductOptionResponse;
         }
     }
 }

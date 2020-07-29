@@ -154,6 +154,25 @@ namespace ProductManagement.API.Controllers
             }
         }
 
+        [HttpPut("/api/products/{id}/options/{optionId}")]
+        [ProducesResponseType(typeof(UpdateProductOptionResponse), 200)]
+        [ProducesResponseType(typeof(ApiResult), 400)]
+        public async Task<IActionResult> UpdateProductOption(Guid id, Guid optionId, [FromBody] UpdateProductOptionRequest updateProductOptionRequest)
+        {
+            try
+            {
+                _logger.LogInformation($"[Put] /products/{id}/options/{optionId}");
+                 
+                var result = await _productService.UpdateProductOption(id, optionId, updateProductOptionRequest);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception caught!");
+                return BadRequest(new ApiResult { Title = "An error has occured" });
+            }
+        }
+
         ////done
         //[HttpGet]
         //public Products Get()
@@ -219,7 +238,7 @@ namespace ProductManagement.API.Controllers
 
         //    return option;
         //}
-        
+
         ////done
         //[HttpPost("{productId}/options")]
         //public void CreateOption(Guid productId, ProductOption option)
@@ -228,6 +247,7 @@ namespace ProductManagement.API.Controllers
         //    option.Save();
         //}
 
+        ////done
         //[HttpPut("{productId}/options/{id}")]
         //public void UpdateOption(Guid id, ProductOption option)
         //{

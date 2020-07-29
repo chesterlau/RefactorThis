@@ -229,5 +229,24 @@ namespace ProductManagement.Data.Repositories
 
             return rowsAdded > 0;
         }
+
+        public async Task<bool> UpdateProductOption(ProductOption productOption)
+        {
+            _logger.LogInformation($"Updating a product option in the database");
+
+            int rowsUpdated = 0;
+            using (var conn = CreateConnection())
+            {
+                await conn.OpenAsync();
+                var cmd = conn.CreateCommand();
+
+                cmd.CommandText = $"update productoptions set name = '{productOption.Name}', description = '{productOption.Description}' where id = '{productOption.Id}' collate nocase";
+
+                await conn.OpenAsync();
+                rowsUpdated = await cmd.ExecuteNonQueryAsync();
+            }
+
+            return rowsUpdated > 0;
+        }
     }
 }
