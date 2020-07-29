@@ -145,5 +145,26 @@ namespace ProductManagement.Core.Services
 
             return getProductOptionsByProductIdResponse;
         }
+
+        public async Task<GetProductOptionsByProductIdAndOptionsIdResponse> GetProductOptionsByProductIdAndOptionsId(Guid productId, Guid optionId)
+        {
+            var productOption = await _productRepository.GetProductOptionsByProductIdAndOptionsId(productId, optionId);
+
+            if (productOption == null)
+            {
+                _logger.LogInformation($"No product options found with optionsId: {optionId} and productId: {productId}");
+                return null;
+            }
+
+            var getProductOptionsByProductIdAndOptionsIdResponse = new GetProductOptionsByProductIdAndOptionsIdResponse
+            {
+                Name = productOption.Name,
+                Description = productOption.Description,
+                Id = productOption.Id,
+                ProductId = productOption.ProductId
+            };
+
+            return getProductOptionsByProductIdAndOptionsIdResponse;
+        }
     }
 }

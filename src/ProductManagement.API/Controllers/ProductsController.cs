@@ -97,16 +97,35 @@ namespace ProductManagement.API.Controllers
             }
         }
 
-        [HttpGet("/api/Products/{productId}/options")]
+        [HttpGet("/api/Products/{id}/options")]
         [ProducesResponseType(typeof(GetProductOptionsByProductIdResponse), 200)]
         [ProducesResponseType(typeof(ApiResult), 400)]
-        public async Task<IActionResult> GetProductOptionsByProductId(Guid productId)
+        public async Task<IActionResult> GetProductOptionsByProductId(Guid id)
         {
             try
             {
-                _logger.LogInformation($"[GET] /api/Products/{productId}/options");
+                _logger.LogInformation($"[GET] /api/Products/{id}/options");
 
-                var result = await _productService.GetProductOptionsByProductId(productId);
+                var result = await _productService.GetProductOptionsByProductId(id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception caught!");
+                return BadRequest(new ApiResult { Title = "An error has occured" });
+            }
+        }
+
+        [HttpGet("/api/Products/{id}/options/{optionId}")]
+        [ProducesResponseType(typeof(GetProductOptionsByProductIdAndOptionsIdResponse), 200)]
+        [ProducesResponseType(typeof(ApiResult), 400)]
+        public async Task<IActionResult> GetProductOptionsByProductId(Guid id, Guid optionId)
+        {
+            try
+            {
+                _logger.LogInformation($"[GET] /api/Products/{id}/options/{optionId}");
+
+                var result = await _productService.GetProductOptionsByProductIdAndOptionsId(id, optionId);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -171,6 +190,7 @@ namespace ProductManagement.API.Controllers
         //    return new ProductOptions(productId);
         //}
 
+        ////done
         //[HttpGet("{productId}/options/{id}")]
         //public ProductOption GetOption(Guid productId, Guid id)
         //{
