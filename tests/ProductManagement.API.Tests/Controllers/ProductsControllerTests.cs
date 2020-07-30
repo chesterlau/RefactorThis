@@ -454,7 +454,6 @@ namespace ProductManagement.API.Tests.Controllers
             GetProductOptionsByProductIdAndOptionsIdResponse getProductOptionsByProductIdAndOptionsIdResponse = new GetProductOptionsByProductIdAndOptionsIdResponse
             {
                 Id = Guid.Parse("de1287c0-4b15-4a7b-9d8a-dd21b3cafec3"),
-                ProductId = Guid.Parse("845403f2-5179-4efb-820e-c1c120ed5930"),
                 Name = "Test product option name",
                 Description = "Test description",
             };
@@ -471,7 +470,6 @@ namespace ProductManagement.API.Tests.Controllers
 
             //Assert
             Assert.Equal(getProductOptionsByProductIdAndOptionsIdResponse.Id, responseObject.Id);
-            Assert.Equal(getProductOptionsByProductIdAndOptionsIdResponse.ProductId, responseObject.ProductId);
             Assert.Equal(getProductOptionsByProductIdAndOptionsIdResponse.Name, responseObject.Name);
             Assert.Equal(getProductOptionsByProductIdAndOptionsIdResponse.Description, responseObject.Description);
 

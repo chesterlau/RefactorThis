@@ -158,8 +158,7 @@ namespace ProductManagement.Core.Services
             {
                 Name = productOption.Name,
                 Description = productOption.Description,
-                Id = productOption.Id,
-                ProductId = productOption.ProductId
+                Id = productOption.Id
             };
 
             return getProductOptionsByProductIdAndOptionsIdResponse;

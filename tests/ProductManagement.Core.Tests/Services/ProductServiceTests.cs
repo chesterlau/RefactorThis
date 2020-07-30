@@ -287,7 +287,6 @@ namespace ProductManagement.Core.Tests.Services
 
             //Assert
             Assert.Equal(productOption.Id, result.Id);
-            Assert.Equal(productOption.ProductId, result.ProductId);
             Assert.Equal(productOption.Name, result.Name);
             Assert.Equal(productOption.Description, result.Description);
 
