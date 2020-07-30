@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProductManagement.Contracts.Dto;
 using ProductManagement.Core.Services;
@@ -21,8 +22,8 @@ namespace ProductManagement.API.Controllers
         }
 
         [HttpGet("/api/products")]
-        [ProducesResponseType(typeof(GetAllProductsResponse), 200)]
-        [ProducesResponseType(typeof(ApiResult), 400)]
+        [ProducesResponseType(typeof(GetAllProductsResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetProducts([FromQuery] string name)
         {
             try
@@ -40,8 +41,8 @@ namespace ProductManagement.API.Controllers
         }
 
         [HttpGet("/api/products/{id}")]
-        [ProducesResponseType(typeof(GetProductByIdResponse), 200)]
-        [ProducesResponseType(typeof(ApiResult), 400)]
+        [ProducesResponseType(typeof(GetProductByIdResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetProductById(Guid id)
         {
             try
@@ -59,8 +60,8 @@ namespace ProductManagement.API.Controllers
         }
 
         [HttpPost("/api/products/")]
-        [ProducesResponseType(typeof(CreateProductResponse), 200)]
-        [ProducesResponseType(typeof(ApiResult), 400)]
+        [ProducesResponseType(typeof(CreateProductResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductRequest createProductRequest)
         {
             try
@@ -78,8 +79,8 @@ namespace ProductManagement.API.Controllers
         }
 
         [HttpPut("/api/products/{id}")]
-        [ProducesResponseType(typeof(UpdateProductResponse), 200)]
-        [ProducesResponseType(typeof(ApiResult), 400)]
+        [ProducesResponseType(typeof(UpdateProductResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateProduct(Guid id, [FromBody] UpdateProductRequest updateProductRequest)
         {
             try
@@ -97,8 +98,8 @@ namespace ProductManagement.API.Controllers
         }
 
         [HttpGet("/api/products/{id}/options")]
-        [ProducesResponseType(typeof(GetProductOptionsByProductIdResponse), 200)]
-        [ProducesResponseType(typeof(ApiResult), 400)]
+        [ProducesResponseType(typeof(GetProductOptionsByProductIdResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetProductOptionsByProductId(Guid id)
         {
             try
@@ -116,8 +117,8 @@ namespace ProductManagement.API.Controllers
         }
 
         [HttpGet("/api/products/{id}/options/{optionId}")]
-        [ProducesResponseType(typeof(GetProductOptionsByProductIdAndOptionsIdResponse), 200)]
-        [ProducesResponseType(typeof(ApiResult), 400)]
+        [ProducesResponseType(typeof(GetProductOptionsByProductIdAndOptionsIdResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetProductOptionsByProductId(Guid id, Guid optionId)
         {
             try
@@ -135,7 +136,7 @@ namespace ProductManagement.API.Controllers
         }
 
         [HttpPost("/api/products/{id}/options")]
-        [ProducesResponseType(typeof(CreateProductOptionResponse), 200)]
+        [ProducesResponseType(typeof(CreateProductOptionResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult), 400)]
         public async Task<IActionResult> CreateProductOption(Guid id, [FromBody] CreateProductOptionRequest createProductOptionRequest)
         {
@@ -154,8 +155,8 @@ namespace ProductManagement.API.Controllers
         }
 
         [HttpPut("/api/products/{id}/options/{optionId}")]
-        [ProducesResponseType(typeof(UpdateProductOptionResponse), 200)]
-        [ProducesResponseType(typeof(ApiResult), 400)]
+        [ProducesResponseType(typeof(UpdateProductOptionResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UpdateProductOption(Guid id, Guid optionId, [FromBody] UpdateProductOptionRequest updateProductOptionRequest)
         {
             try
@@ -173,7 +174,7 @@ namespace ProductManagement.API.Controllers
         }
 
         [HttpDelete("/api/products/{id}/options/{optionId}")]
-        [ProducesResponseType(typeof(DeleteProductOptionResponse), 200)]
+        [ProducesResponseType(typeof(DeleteProductOptionResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult), 400)]
         public async Task<IActionResult> DeleteProductOption(Guid id, Guid optionId)
         {
@@ -192,8 +193,8 @@ namespace ProductManagement.API.Controllers
         }
 
         [HttpDelete("/api/products/{id}")]
-        [ProducesResponseType(typeof(DeleteProductResponse), 200)]
-        [ProducesResponseType(typeof(ApiResult), 400)]
+        [ProducesResponseType(typeof(DeleteProductResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> DeleteProduct(Guid id)
         {
             try
