@@ -411,5 +411,312 @@ namespace ProductManagement.API.Tests.Controllers
             mockProductService.VerifyAll();
         }
 
+        [Fact]
+        public async Task GetProductOptionByProductIdAndOptionId_Returns_OkResponse_Successfully()
+        {
+            //Arrange
+            Mock<ILogger<ProductsController>> mockLogger = new Mock<ILogger<ProductsController>>();
+            Mock<IProductService> mockProductService = new Mock<IProductService>();
+
+            GetProductOptionsByProductIdAndOptionsIdResponse getProductOptionsByProductIdAndOptionsIdResponse = new GetProductOptionsByProductIdAndOptionsIdResponse
+            {
+                Id = Guid.Parse("de1287c0-4b15-4a7b-9d8a-dd21b3cafec3"),
+                ProductId = Guid.Parse("845403f2-5179-4efb-820e-c1c120ed5930"),
+                Name = "Test product option name",
+                Description = "Test description",
+            };
+
+            mockProductService.Setup(m => m.GetProductOptionsByProductIdAndOptionsId(It.IsAny<Guid>(), It.IsAny<Guid>()))
+                .ReturnsAsync(getProductOptionsByProductIdAndOptionsIdResponse)
+                .Verifiable();
+
+            ProductsController productsController = new ProductsController(mockLogger.Object, mockProductService.Object);
+
+            //Act
+            var response = await productsController.GetProductOptionByProductIdAndOptionId(Guid.Parse("de1287c0-4b15-4a7b-9d8a-dd21b3cafec3"), Guid.Parse("845403f2-5179-4efb-820e-c1c120ed5930")) as OkObjectResult;
+            var responseObject = response.Value as GetProductOptionsByProductIdAndOptionsIdResponse;
+
+            //Assert
+            Assert.Equal(getProductOptionsByProductIdAndOptionsIdResponse.Id, responseObject.Id);
+            Assert.Equal(getProductOptionsByProductIdAndOptionsIdResponse.ProductId, responseObject.ProductId);
+            Assert.Equal(getProductOptionsByProductIdAndOptionsIdResponse.Name, responseObject.Name);
+            Assert.Equal(getProductOptionsByProductIdAndOptionsIdResponse.Description, responseObject.Description);
+
+            mockLogger.VerifyAll();
+            mockProductService.VerifyAll();
+        }
+
+        [Fact]
+        public async Task GetProductOptionByProductIdAndOptionId_Returns_BadResponse_If_Exception_Is_Thrown()
+        {
+            //Arrange
+            Mock<ILogger<ProductsController>> mockLogger = new Mock<ILogger<ProductsController>>();
+            Mock<IProductService> mockProductService = new Mock<IProductService>();
+
+            mockProductService.Setup(m => m.GetProductOptionsByProductIdAndOptionsId(It.IsAny<Guid>(), It.IsAny<Guid>()))
+                .ThrowsAsync(new Exception("Error occured!"))
+                .Verifiable();
+
+            ProductsController productsController = new ProductsController(mockLogger.Object, mockProductService.Object);
+
+            //Act
+            var response = await productsController.GetProductOptionByProductIdAndOptionId(Guid.Parse("de1287c0-4b15-4a7b-9d8a-dd21b3cafec3"), Guid.Parse("845403f2-5179-4efb-820e-c1c120ed5930")) as BadRequestObjectResult;
+            var responseObject = response.Value as ApiResult;
+
+            //Assert
+            Assert.Equal("An error has occured", responseObject.Error);
+
+            mockLogger.VerifyAll();
+            mockProductService.VerifyAll();
+        }
+
+        [Fact]
+        public async Task CreateProductOption_Returns_OkResponse_Successfully()
+        {
+            //Arrange
+            Mock<ILogger<ProductsController>> mockLogger = new Mock<ILogger<ProductsController>>();
+            Mock<IProductService> mockProductService = new Mock<IProductService>();
+
+            Guid productId = Guid.Parse("de1287c0-4b15-4a7b-9d8a-dd21b3cafec3");
+
+            CreateProductOptionRequest createProductOptionRequest = new CreateProductOptionRequest
+            {
+                Name = "Test Product Option 1",
+                Description = "Description 1",
+            };
+
+            mockProductService.Setup(m => m.CreateProductOption(productId, It.IsAny<CreateProductOptionRequest>()))
+                .ReturnsAsync(new CreateProductOptionResponse
+                {
+                    IsSuccessful = true
+                })
+                .Verifiable();
+
+            ProductsController productsController = new ProductsController(mockLogger.Object, mockProductService.Object);
+
+            //Act
+            var response = await productsController.CreateProductOption(productId, createProductOptionRequest) as OkObjectResult;
+            var responseObject = response.Value as CreateProductOptionResponse;
+
+            //Assert
+            Assert.True(responseObject.IsSuccessful);
+
+            mockLogger.VerifyAll();
+            mockProductService.VerifyAll();
+        }
+
+        [Fact]
+        public async Task CreateProductOption_Returns_BadResponse_If_Exception_Is_Thrown()
+        {
+            //Arrange
+            Mock<ILogger<ProductsController>> mockLogger = new Mock<ILogger<ProductsController>>();
+            Mock<IProductService> mockProductService = new Mock<IProductService>();
+
+            Guid productId = Guid.Parse("de1287c0-4b15-4a7b-9d8a-dd21b3cafec3");
+
+            CreateProductOptionRequest createProductOptionRequest = new CreateProductOptionRequest
+            {
+                Name = "Test Product Option 1",
+                Description = "Description 1",
+            };
+
+            mockProductService.Setup(m => m.CreateProductOption(productId, It.IsAny<CreateProductOptionRequest>()))
+                .ThrowsAsync(new Exception("Error occured!"))
+                .Verifiable();
+
+            ProductsController productsController = new ProductsController(mockLogger.Object, mockProductService.Object);
+
+            //Act
+            var response = await productsController.CreateProductOption(productId, createProductOptionRequest) as BadRequestObjectResult;
+            var responseObject = response.Value as ApiResult;
+
+            //Assert
+            Assert.Equal("An error has occured", responseObject.Error);
+
+            mockLogger.VerifyAll();
+            mockProductService.VerifyAll();
+        }
+
+        [Fact]
+        public async Task UpdateProductOption_Returns_OkResponse_Successfully()
+        {
+            //Arrange
+            Mock<ILogger<ProductsController>> mockLogger = new Mock<ILogger<ProductsController>>();
+            Mock<IProductService> mockProductService = new Mock<IProductService>();
+
+            Guid productId = Guid.Parse("de1287c0-4b15-4a7b-9d8a-dd21b3cafec3");
+            Guid optionId = Guid.Parse("845403f2-5179-4efb-820e-c1c120ed5930");
+
+            UpdateProductOptionRequest updateProductOptionRequest = new UpdateProductOptionRequest
+            {
+                Name = "Test Product Option 2",
+                Description = "Description 2",
+            };
+
+            mockProductService.Setup(m => m.UpdateProductOption(productId, optionId, It.IsAny<UpdateProductOptionRequest>()))
+                .ReturnsAsync(new UpdateProductOptionResponse
+                {
+                    IsSuccessful = true
+                })
+                .Verifiable();
+
+            ProductsController productsController = new ProductsController(mockLogger.Object, mockProductService.Object);
+
+            //Act
+            var response = await productsController.UpdateProductOption(productId, optionId, updateProductOptionRequest) as OkObjectResult;
+            var responseObject = response.Value as UpdateProductOptionResponse;
+
+            //Assert
+            Assert.True(responseObject.IsSuccessful);
+
+            mockLogger.VerifyAll();
+            mockProductService.VerifyAll();
+        }
+
+        [Fact]
+        public async Task UpdateProductOption_Returns_BadResponse_If_Exception_Is_Thrown()
+        {
+            //Arrange
+            Mock<ILogger<ProductsController>> mockLogger = new Mock<ILogger<ProductsController>>();
+            Mock<IProductService> mockProductService = new Mock<IProductService>();
+
+            Guid productId = Guid.Parse("de1287c0-4b15-4a7b-9d8a-dd21b3cafec3");
+            Guid optionId = Guid.Parse("845403f2-5179-4efb-820e-c1c120ed5930");
+
+            UpdateProductOptionRequest updateProductOptionRequest = new UpdateProductOptionRequest
+            {
+                Name = "Test Product Option 2",
+                Description = "Description 2",
+            };
+
+            mockProductService.Setup(m => m.UpdateProductOption(productId, optionId, It.IsAny<UpdateProductOptionRequest>()))
+                .ThrowsAsync(new Exception("Error occured!"))
+                .Verifiable();
+
+            ProductsController productsController = new ProductsController(mockLogger.Object, mockProductService.Object);
+
+            //Act
+            var response = await productsController.UpdateProductOption(productId, optionId, updateProductOptionRequest) as BadRequestObjectResult;
+            var responseObject = response.Value as ApiResult;
+
+            //Assert
+            Assert.Equal("An error has occured", responseObject.Error);
+
+            mockLogger.VerifyAll();
+            mockProductService.VerifyAll();
+        }
+
+        [Fact]
+        public async Task DeleteProductOption_Returns_OkResponse_Successfully()
+        {
+            //Arrange
+            Mock<ILogger<ProductsController>> mockLogger = new Mock<ILogger<ProductsController>>();
+            Mock<IProductService> mockProductService = new Mock<IProductService>();
+
+            Guid productId = Guid.Parse("de1287c0-4b15-4a7b-9d8a-dd21b3cafec3");
+            Guid optionId = Guid.Parse("845403f2-5179-4efb-820e-c1c120ed5930");
+
+            mockProductService.Setup(m => m.DeleteProductOption(productId, optionId))
+                .ReturnsAsync(new DeleteProductOptionResponse
+                {
+                    IsSuccessful = true
+                })
+                .Verifiable();
+
+            ProductsController productsController = new ProductsController(mockLogger.Object, mockProductService.Object);
+
+            //Act
+            var response = await productsController.DeleteProductOption(productId, optionId) as OkObjectResult;
+            var responseObject = response.Value as DeleteProductOptionResponse;
+
+            //Assert
+            Assert.True(responseObject.IsSuccessful);
+
+            mockLogger.VerifyAll();
+            mockProductService.VerifyAll();
+        }
+
+        [Fact]
+        public async Task DeleteProductOption_Returns_BadResponse_If_Exception_Is_Thrown()
+        {
+            //Arrange
+            Mock<ILogger<ProductsController>> mockLogger = new Mock<ILogger<ProductsController>>();
+            Mock<IProductService> mockProductService = new Mock<IProductService>();
+
+            Guid productId = Guid.Parse("de1287c0-4b15-4a7b-9d8a-dd21b3cafec3");
+            Guid optionId = Guid.Parse("845403f2-5179-4efb-820e-c1c120ed5930");
+
+            mockProductService.Setup(m => m.DeleteProductOption(productId, optionId))
+                .ThrowsAsync(new Exception("Error occured!"))
+                .Verifiable();
+
+            ProductsController productsController = new ProductsController(mockLogger.Object, mockProductService.Object);
+
+            //Act
+            var response = await productsController.DeleteProductOption(productId, optionId) as BadRequestObjectResult;
+            var responseObject = response.Value as ApiResult;
+
+            //Assert
+            Assert.Equal("An error has occured", responseObject.Error);
+
+            mockLogger.VerifyAll();
+            mockProductService.VerifyAll();
+        }
+
+        [Fact]
+        public async Task DeleteProduct_Returns_OkResponse_Successfully()
+        {
+            //Arrange
+            Mock<ILogger<ProductsController>> mockLogger = new Mock<ILogger<ProductsController>>();
+            Mock<IProductService> mockProductService = new Mock<IProductService>();
+
+            Guid productId = Guid.Parse("de1287c0-4b15-4a7b-9d8a-dd21b3cafec3");
+
+            mockProductService.Setup(m => m.DeleteProduct(productId))
+                .ReturnsAsync(new DeleteProductResponse
+                {
+                    IsSuccessful = true
+                })
+                .Verifiable();
+
+            ProductsController productsController = new ProductsController(mockLogger.Object, mockProductService.Object);
+
+            //Act
+            var response = await productsController.DeleteProduct(productId) as OkObjectResult;
+            var responseObject = response.Value as DeleteProductResponse;
+
+            //Assert
+            Assert.True(responseObject.IsSuccessful);
+
+            mockLogger.VerifyAll();
+            mockProductService.VerifyAll();
+        }
+
+        [Fact]
+        public async Task DeleteProduct_Returns_BadResponse_If_Exception_Is_Thrown()
+        {
+            //Arrange
+            Mock<ILogger<ProductsController>> mockLogger = new Mock<ILogger<ProductsController>>();
+            Mock<IProductService> mockProductService = new Mock<IProductService>();
+
+            Guid productId = Guid.Parse("de1287c0-4b15-4a7b-9d8a-dd21b3cafec3");
+
+            mockProductService.Setup(m => m.DeleteProduct(productId))
+                .ThrowsAsync(new Exception("Error occured!"))
+                .Verifiable();
+
+            ProductsController productsController = new ProductsController(mockLogger.Object, mockProductService.Object);
+
+            //Act
+            var response = await productsController.DeleteProduct(productId) as BadRequestObjectResult;
+            var responseObject = response.Value as ApiResult;
+
+            //Assert
+            Assert.Equal("An error has occured", responseObject.Error);
+
+            mockLogger.VerifyAll();
+            mockProductService.VerifyAll();
+        }
+
     }
 }
