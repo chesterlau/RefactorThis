@@ -30,7 +30,7 @@ namespace ProductManagement.API.Controllers
         {
             try
             {
-                _logger.LogInformation($"[GET] /Products");
+                _logger.LogInformation($"[GET] /products");
 
                 var result = await _productService.GetAllProductsWithOptionalNameFilter(name);
                 return Ok(result);
@@ -50,7 +50,7 @@ namespace ProductManagement.API.Controllers
         {
             try
             {
-                _logger.LogInformation($"[GET] /Products/{id}");
+                _logger.LogInformation($"[GET] /products/{id}");
 
                 var result = await _productService.GetProductById(id);
 
@@ -77,7 +77,7 @@ namespace ProductManagement.API.Controllers
         {
             try
             {
-                _logger.LogInformation($"[POST] /Products");
+                _logger.LogInformation($"[POST] /products");
 
                 var result = await _productService.CreateProduct(createProductRequest);
                 return Ok(result);
@@ -96,7 +96,7 @@ namespace ProductManagement.API.Controllers
         {
             try
             {
-                _logger.LogInformation($"[Put] /Products/{id}");
+                _logger.LogInformation($"[Put] /products/{id}");
 
                 var result = await _productService.UpdateProduct(id, updateProductRequest);
                 return Ok(result);
@@ -115,7 +115,7 @@ namespace ProductManagement.API.Controllers
         {
             try
             {
-                _logger.LogInformation($"[GET] /api/Products/{id}/options");
+                _logger.LogInformation($"[GET] /products/{id}/options");
 
                 var result = await _productService.GetProductOptionsByProductId(id);
                 return Ok(result);
@@ -135,7 +135,7 @@ namespace ProductManagement.API.Controllers
         {
             try
             {
-                _logger.LogInformation($"[GET] /api/Products/{id}/options/{optionId}");
+                _logger.LogInformation($"[GET] /products/{id}/options/{optionId}");
 
                 var result = await _productService.GetProductOptionsByProductIdAndOptionsId(id, optionId);
 
@@ -162,7 +162,7 @@ namespace ProductManagement.API.Controllers
         {
             try
             {
-                _logger.LogInformation($"[POST] /Products/{id}/options");
+                _logger.LogInformation($"[POST] /products/{id}/options");
 
                 var result = await _productService.CreateProductOption(id, createProductOptionRequest);
                 return Ok(result);
