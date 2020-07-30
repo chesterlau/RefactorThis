@@ -160,6 +160,39 @@ namespace ProductManagement.API.Tests.Controllers
         }
 
         [Fact]
+        public async Task GetProductById_Returns_NotFoundResponse_If_Product_NotFound()
+        {
+            //Arrange
+            Mock<ILogger<ProductsController>> mockLogger = new Mock<ILogger<ProductsController>>();
+            Mock<IProductService> mockProductService = new Mock<IProductService>();
+
+            Product product = new Product
+            {
+                Id = Guid.Parse("de1287c0-4b15-4a7b-9d8a-dd21b3cafec3"),
+                Name = "Test Product 1",
+                Description = "Description 1",
+                Price = 2000M,
+                DeliveryPrice = 10M
+            };
+
+            mockProductService.Setup(m => m.GetProductById(It.IsAny<Guid>()))
+                .ReturnsAsync(null as GetProductByIdResponse)
+                .Verifiable();
+
+            ProductsController productsController = new ProductsController(mockLogger.Object, mockProductService.Object);
+
+            //Act
+            var response = await productsController.GetProductById(Guid.Parse("de1287c0-4b15-4a7b-9d8a-dd21b3cafec3")) as NotFoundObjectResult;
+            var responseObject = response.Value as GetProductByIdResponse;
+
+            //Assert
+            Assert.Null(responseObject);
+
+            mockLogger.VerifyAll();
+            mockProductService.VerifyAll();
+        }
+
+        [Fact]
         public async Task GetProductById_Returns_BadResponse_If_Exception_Is_Thrown()
         {
             //Arrange
@@ -441,6 +474,30 @@ namespace ProductManagement.API.Tests.Controllers
             Assert.Equal(getProductOptionsByProductIdAndOptionsIdResponse.ProductId, responseObject.ProductId);
             Assert.Equal(getProductOptionsByProductIdAndOptionsIdResponse.Name, responseObject.Name);
             Assert.Equal(getProductOptionsByProductIdAndOptionsIdResponse.Description, responseObject.Description);
+
+            mockLogger.VerifyAll();
+            mockProductService.VerifyAll();
+        }
+
+        [Fact]
+        public async Task GetProductOptionByProductIdAndOptionId_Returns_NotFoundResponse_If_ProductOption_Not_Found()
+        {
+            //Arrange
+            Mock<ILogger<ProductsController>> mockLogger = new Mock<ILogger<ProductsController>>();
+            Mock<IProductService> mockProductService = new Mock<IProductService>();
+
+            mockProductService.Setup(m => m.GetProductOptionsByProductIdAndOptionsId(It.IsAny<Guid>(), It.IsAny<Guid>()))
+                .ReturnsAsync(null as GetProductOptionsByProductIdAndOptionsIdResponse)
+                .Verifiable();
+
+            ProductsController productsController = new ProductsController(mockLogger.Object, mockProductService.Object);
+
+            //Act
+            var response = await productsController.GetProductOptionByProductIdAndOptionId(Guid.Parse("de1287c0-4b15-4a7b-9d8a-dd21b3cafec3"), Guid.Parse("845403f2-5179-4efb-820e-c1c120ed5930")) as NotFoundObjectResult;
+            var responseObject = response.Value as GetProductOptionsByProductIdAndOptionsIdResponse;
+
+            //Assert
+            Assert.Null(responseObject);
 
             mockLogger.VerifyAll();
             mockProductService.VerifyAll();
