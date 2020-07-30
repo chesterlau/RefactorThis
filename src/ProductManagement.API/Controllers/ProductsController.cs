@@ -131,7 +131,7 @@ namespace ProductManagement.API.Controllers
         [ProducesResponseType(typeof(GetProductOptionsByProductIdAndOptionsIdResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(GetProductOptionsByProductIdAndOptionsIdResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> GetProductOptionsByProductId(Guid id, Guid optionId)
+        public async Task<IActionResult> GetProductOptionByProductIdAndOptionId(Guid id, Guid optionId)
         {
             try
             {
