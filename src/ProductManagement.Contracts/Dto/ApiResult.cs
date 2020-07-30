@@ -2,6 +2,6 @@
 {
     public class ApiResult
     {
-        public string Title { get; set; }
+        public string Error { get; set; }
     }
 }

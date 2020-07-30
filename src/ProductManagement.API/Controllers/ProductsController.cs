@@ -35,7 +35,7 @@ namespace ProductManagement.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception caught!");
-                return BadRequest(new ApiResult { Title = "An error has occured" });
+                return BadRequest(new ApiResult { Error = "An error has occured" });
             }
         }
 
@@ -54,7 +54,7 @@ namespace ProductManagement.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception caught!");
-                return BadRequest(new ApiResult { Title = "An error has occured" });
+                return BadRequest(new ApiResult { Error = "An error has occured" });
             }
         }
 
@@ -73,7 +73,7 @@ namespace ProductManagement.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception caught!");
-                return BadRequest(new ApiResult { Title = "An error has occured" });
+                return BadRequest(new ApiResult { Error = "An error has occured" });
             }
         }
 
@@ -92,7 +92,7 @@ namespace ProductManagement.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception caught!");
-                return BadRequest(new ApiResult { Title = "An error has occured" });
+                return BadRequest(new ApiResult { Error = "An error has occured" });
             }
         }
 
@@ -111,7 +111,7 @@ namespace ProductManagement.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception caught!");
-                return BadRequest(new ApiResult { Title = "An error has occured" });
+                return BadRequest(new ApiResult { Error = "An error has occured" });
             }
         }
 
@@ -130,7 +130,7 @@ namespace ProductManagement.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception caught!");
-                return BadRequest(new ApiResult { Title = "An error has occured" });
+                return BadRequest(new ApiResult { Error = "An error has occured" });
             }
         }
 
@@ -149,7 +149,7 @@ namespace ProductManagement.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception caught!");
-                return BadRequest(new ApiResult { Title = "An error has occured" });
+                return BadRequest(new ApiResult { Error = "An error has occured" });
             }
         }
 
@@ -168,7 +168,7 @@ namespace ProductManagement.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception caught!");
-                return BadRequest(new ApiResult { Title = "An error has occured" });
+                return BadRequest(new ApiResult { Error = "An error has occured" });
             }
         }
 
@@ -187,7 +187,7 @@ namespace ProductManagement.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception caught!");
-                return BadRequest(new ApiResult { Title = "An error has occured" });
+                return BadRequest(new ApiResult { Error = "An error has occured" });
             }
         }
 
@@ -206,7 +206,7 @@ namespace ProductManagement.API.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Exception caught!");
-                return BadRequest(new ApiResult { Title = "An error has occured" });
+                return BadRequest(new ApiResult { Error = "An error has occured" });
             }
         }
     }
