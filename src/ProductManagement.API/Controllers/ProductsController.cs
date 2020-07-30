@@ -23,6 +23,11 @@ namespace ProductManagement.API.Controllers
             _productService = productService;
         }
 
+        /// <summary>
+        /// Gets the all the products
+        /// </summary>
+        /// <param name="name">Optional query of to filter by product name</param>
+        /// <returns>The products</returns>
         [HttpGet]
         [ProducesResponseType(typeof(GetAllProductsResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
@@ -42,6 +47,11 @@ namespace ProductManagement.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the product by the product identifier
+        /// </summary>
+        /// <param name="id">The product idenfitier</param>
+        /// <returns>The product</returns>
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(GetProductByIdResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(GetProductByIdResponse), StatusCodes.Status404NotFound)]
@@ -69,7 +79,12 @@ namespace ProductManagement.API.Controllers
                 return BadRequest(new ApiResult { Error = "An error has occured" });
             }
         }
-
+        
+        /// <summary>
+        /// Creates a new product
+        /// </summary>
+        /// <param name="createProductRequest">The details of the new product</param>
+        /// <returns>Result to indicate whether the creation was successful</returns>
         [HttpPost]
         [ProducesResponseType(typeof(CreateProductResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
@@ -89,6 +104,12 @@ namespace ProductManagement.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates the product
+        /// </summary>
+        /// <param name="id">The product identifier to update</param>
+        /// <param name="updateProductRequest">The details of the product to update</param>
+        /// <returns>Result to indicate whether the update was successful</returns>
         [HttpPut("{id}")]
         [ProducesResponseType(typeof(UpdateProductResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
@@ -108,6 +129,11 @@ namespace ProductManagement.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the product options by the product identifier
+        /// </summary>
+        /// <param name="id">The product identifier</param>
+        /// <returns>The product options associated to the product</returns>
         [HttpGet("{id}/options")]
         [ProducesResponseType(typeof(GetProductOptionsByProductIdResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
@@ -127,6 +153,12 @@ namespace ProductManagement.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the product option by product identifier and product option identifier
+        /// </summary>
+        /// <param name="id">The product identifier</param>
+        /// <param name="optionId">The product option identifier</param>
+        /// <returns>The product option that is associated to the product identifier and product options identifier</returns>
         [HttpGet("{id}/options/{optionId}")]
         [ProducesResponseType(typeof(GetProductOptionsByProductIdAndOptionsIdResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(GetProductOptionsByProductIdAndOptionsIdResponse), StatusCodes.Status404NotFound)]
@@ -155,6 +187,12 @@ namespace ProductManagement.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Creates a new product option
+        /// </summary>
+        /// <param name="id">The product identifier</param>
+        /// <param name="createProductOptionRequest">The details of the new product option</param>
+        /// <returns>Result to indicate whether the creation was successful</returns>
         [HttpPost("{id}/options")]
         [ProducesResponseType(typeof(CreateProductOptionResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult), 400)]
@@ -174,6 +212,13 @@ namespace ProductManagement.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates a product option
+        /// </summary>
+        /// <param name="id">The product identifier</param>
+        /// <param name="optionId">The product option identifier</param>
+        /// <param name="updateProductOptionRequest">The details of the product option to udpate</param>
+        /// <returns>Result to indicate whether the creation was successful</returns>
         [HttpPut("{id}/options/{optionId}")]
         [ProducesResponseType(typeof(UpdateProductOptionResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
@@ -193,6 +238,12 @@ namespace ProductManagement.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes a product option
+        /// </summary>
+        /// <param name="id">The product identifier</param>
+        /// <param name="optionId">The product option identifier</param>
+        /// <returns>Result to indicate whether the deletion was successful</returns>
         [HttpDelete("{id}/options/{optionId}")]
         [ProducesResponseType(typeof(DeleteProductOptionResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult), 400)]
@@ -212,6 +263,11 @@ namespace ProductManagement.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes a product
+        /// </summary>
+        /// <param name="id">The product identifier</param>
+        /// <returns>Result to indicate whether the deletion was successful</returns>
         [HttpDelete("{id}")]
         [ProducesResponseType(typeof(DeleteProductResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
