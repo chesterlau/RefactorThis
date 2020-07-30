@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,6 +10,7 @@ using ProductManagement.Data.Repositories;
 using Serilog;
 using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 
 namespace ProductManagement.API
@@ -32,12 +34,17 @@ namespace ProductManagement.API
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1",
-                    new Microsoft.OpenApi.Models.OpenApiInfo
-                    {
-                        Title = "Product Management API",
-                        Version = "v1"
-                    });
+                var provider = services.BuildServiceProvider().GetRequiredService<IApiDescriptionGroupCollectionProvider>();
+
+                foreach (var description in provider.ApiDescriptionGroups.Items.Where(x => x.GroupName != null))
+                {
+                    c.SwaggerDoc(description.GroupName,
+                        new Microsoft.OpenApi.Models.OpenApiInfo
+                        {
+                            Title = "Product Management API",
+                            Version = description.GroupName
+                        });
+                }
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
