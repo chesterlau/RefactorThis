@@ -7,7 +7,7 @@ using ProductManagement.Contracts.Models;
 using Microsoft.Extensions.Logging;
 using ProductManagement.Core.Services;
 using System.Threading.Tasks;
-using ProductManagement.Contracts.Dto;
+using ProductManagement.Contracts.Dtos;
 
 namespace ProductManagement.Core.Tests.Services
 {

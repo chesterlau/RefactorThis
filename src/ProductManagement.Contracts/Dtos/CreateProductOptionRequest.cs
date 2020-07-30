@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ProductManagement.Contracts.Dto
+namespace ProductManagement.Contracts.Dtos
 {
 	public class CreateProductOptionRequest
 	{

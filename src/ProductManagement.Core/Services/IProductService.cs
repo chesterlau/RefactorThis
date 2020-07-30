@@ -1,4 +1,4 @@
-﻿using ProductManagement.Contracts.Dto;
+﻿using ProductManagement.Contracts.Dtos;
 using System;
 using System.Threading.Tasks;
 

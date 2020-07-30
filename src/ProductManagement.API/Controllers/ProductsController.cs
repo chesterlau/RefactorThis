@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ProductManagement.Contracts.Dto;
+using ProductManagement.Contracts.Dtos;
 using ProductManagement.Core.Services;
 using System;
 using System.Threading.Tasks;

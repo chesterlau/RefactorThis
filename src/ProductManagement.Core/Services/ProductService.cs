@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using ProductManagement.Contracts.Dto;
+using ProductManagement.Contracts.Dtos;
 using ProductManagement.Contracts.Models;
 using ProductManagement.Data.Repositories;
 using System;

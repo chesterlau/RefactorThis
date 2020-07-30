@@ -1,7 +1,7 @@
 ﻿using ProductManagement.Contracts.Models;
 using System.Collections.Generic;
 
-namespace ProductManagement.Contracts.Dto
+namespace ProductManagement.Contracts.Dtos
 {
     public class GetAllProductsResponse
     {

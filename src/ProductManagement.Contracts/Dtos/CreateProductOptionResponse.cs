@@ -1,4 +1,4 @@
-﻿namespace ProductManagement.Contracts.Dto
+﻿namespace ProductManagement.Contracts.Dtos
 {
     public class CreateProductOptionResponse
     {
