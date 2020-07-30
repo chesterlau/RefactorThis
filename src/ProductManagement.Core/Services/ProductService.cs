@@ -28,7 +28,7 @@ namespace ProductManagement.Core.Services
 
             List<Product> products;
 
-            if(string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
             {
                 products = await _productRepository.GetAllProducts();
             }
@@ -53,7 +53,7 @@ namespace ProductManagement.Core.Services
 
             var product = await _productRepository.GetProductById(id);
 
-            if(product == null)
+            if (product == null)
             {
                 _logger.LogInformation($"No product with id: {id} found");
                 return null;
@@ -67,7 +67,7 @@ namespace ProductManagement.Core.Services
                 Name = product.Name,
                 Price = product.Price
             };
-            
+
             return getProductByIdResponse;
         }
 
@@ -86,10 +86,10 @@ namespace ProductManagement.Core.Services
             var result = await _productRepository.CreateProduct(product);
 
             var createProductResponse = new CreateProductResponse
-            { 
+            {
                 IsSuccessful = result
             };
-            
+
             _logger.LogInformation($"Created a product with IsSuccessful: {createProductResponse.IsSuccessful}");
 
             return createProductResponse;
@@ -101,11 +101,11 @@ namespace ProductManagement.Core.Services
 
             var product = await _productRepository.GetProductById(id);
 
-            if(product == null)
+            if (product == null)
             {
                 _logger.LogInformation($"Could not find product with id: {id}");
 
-                return new UpdateProductResponse 
+                return new UpdateProductResponse
                 {
                     IsSuccessful = false
                 };
@@ -119,7 +119,7 @@ namespace ProductManagement.Core.Services
             var result = await _productRepository.UpdateProduct(product);
 
             var updateProductResponse = new UpdateProductResponse
-            { 
+            {
                 IsSuccessful = result
             };
 
@@ -172,7 +172,7 @@ namespace ProductManagement.Core.Services
             //Find the product first
             var product = await _productRepository.GetProductById(productId);
 
-            if(product == null)
+            if (product == null)
             {
                 _logger.LogInformation($"No product with id: {productId} found. Can't add product to product option.");
                 return new CreateProductOptionResponse { IsSuccessful = false };
@@ -232,7 +232,7 @@ namespace ProductManagement.Core.Services
         {
             var productOption = await _productRepository.GetProductOptionsByProductIdAndOptionsId(productId, optionId);
 
-            if(productOption == null)
+            if (productOption == null)
             {
                 _logger.LogInformation($"Could not find product option with productId: {productId} and optionId: {optionId}");
 
@@ -258,11 +258,11 @@ namespace ProductManagement.Core.Services
 
             var productOptions = await _productRepository.GetProductOptionsByProductId(productId);
 
-            foreach(var productOption in productOptions)
+            foreach (var productOption in productOptions)
             {
                 var deleteProductOptionResult = await _productRepository.DeleteProductOption(productOption.Id);
 
-                if(!deleteProductOptionResult)
+                if (!deleteProductOptionResult)
                 {
                     _logger.LogWarning($"Fail to delete product option with optionId: {productOption.Id} and productId: {productOption.ProductId}");
                 }
