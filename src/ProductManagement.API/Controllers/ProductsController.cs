@@ -44,6 +44,7 @@ namespace ProductManagement.API.Controllers
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(GetProductByIdResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetProductByIdResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetProductById(Guid id)
         {
@@ -52,7 +53,15 @@ namespace ProductManagement.API.Controllers
                 _logger.LogInformation($"[GET] /Products/{id}");
 
                 var result = await _productService.GetProductById(id);
-                return Ok(result);
+
+                if(result != null)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return NotFound(result);
+                }
             }
             catch (Exception ex)
             {
@@ -120,6 +129,7 @@ namespace ProductManagement.API.Controllers
 
         [HttpGet("{id}/options/{optionId}")]
         [ProducesResponseType(typeof(GetProductOptionsByProductIdAndOptionsIdResponse), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetProductOptionsByProductIdAndOptionsIdResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ApiResult), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetProductOptionsByProductId(Guid id, Guid optionId)
         {
@@ -128,7 +138,15 @@ namespace ProductManagement.API.Controllers
                 _logger.LogInformation($"[GET] /api/Products/{id}/options/{optionId}");
 
                 var result = await _productService.GetProductOptionsByProductIdAndOptionsId(id, optionId);
-                return Ok(result);
+
+                if(result != null)
+                {
+                    return Ok(result);
+                }
+                else
+                {
+                    return NotFound(result);
+                }
             }
             catch (Exception ex)
             {
