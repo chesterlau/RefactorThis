@@ -1,3 +1,38 @@
+# This project has been refactored and renamed to Product Management Service
+A CRUD product management service to manage products and product options
+
+# Steps
+
+## To run application:
+1. cd src/ProductManagement.API
+2. dotnet run
+
+## To run tests:
+1. cd RefactorThis
+2. dotnet test
+3. This will execute API, Core, and Integration tests
+
+## Requirements
+- .Net Core 3.1 runtime
+- .Net Core 3.1 SDK
+
+## Refactoring changelog
+- Upgraded project to .Net Core 3.1
+- Organised code into appropriate folder structure for clarity and tidyness.
+- Added Serilog logging with log context.
+- Added Swagger to document APIs.
+- Documented API endpoints with comments.
+- Added a HealthController to enable health checks for load balancing.
+- Added API versioning.
+- Added unit and integration tests.
+- Made all calls async to prevent thread pool starvation.
+
+## Future enhancement
+- Deployment pipeline.
+- Log shipping to selected log monitoring platform such as Cloudwatch/DataDog/SumoLogic.
+- Performance monitoring such as adding a New Relic agent.
+
+
 # refactor-this
 The attached project is a poorly written products API in C#.
 
