@@ -26,6 +26,7 @@ A CRUD product management service to manage products and product options
 - Added API versioning.
 - Added unit and integration tests.
 - Made all calls async to prevent thread pool starvation.
+- Added Azure CI pipeline
 
 ## Future enhancement
 - Deployment pipeline.
