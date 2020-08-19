@@ -1,5 +1,3 @@
-name: 'ProductManagement'
-
 trigger:
   - master
 
@@ -29,12 +27,9 @@ steps:
     arguments: '--configuration $(BuildConfiguration) --collect "XPlat Code coverage" -- RunConfiguration.DisableAppDomain=true'
 
 - script: |
-   dotnet tool install dotnet-reportgenerator-globaltool --tool-path .   
-   ./reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory) -reporttypes:"Cobertura"
-
+    dotnet tool install dotnet-reportgenerator-globaltool --tool-path .   
+    ./reportgenerator -reports:$(Agent.TempDirectory)/**/coverage.cobertura.xml -targetdir:$(Build.SourcesDirectory) -reporttypes:"Cobertura"
   displayName: 'Generate code coverage'
-
-
 
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish code coverage'
