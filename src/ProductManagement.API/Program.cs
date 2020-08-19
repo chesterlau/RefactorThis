@@ -19,7 +19,7 @@ namespace ProductManagement.API
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseKestrel()
-                        .UseUrls("http://*:80")
+                        .UseUrls("http://*:8080")
                         .UseContentRoot(Directory.GetCurrentDirectory())
                         .ConfigureAppConfiguration((hostingContext, config) =>
                         {
