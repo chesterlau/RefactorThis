@@ -1,0 +1,10 @@
+version: '3.4'
+
+services:
+  productmanagement:
+    image: productmanagement:v1
+    build:
+      context: .
+      dockerfile: src/Dockerfile
+    ports:
+      - 8000:8080
