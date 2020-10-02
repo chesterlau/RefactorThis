@@ -1,18 +1,6 @@
-<<<<<<< HEAD
-<<<<<<< master
-<<<<<<< master
+
 # This project has been refactored and renamed to Product Management Service
-A CRUD product management service to manage products and product options  
-=======
-# This project has been refactored and renamed to Product Management Service 
-=======
-# This project has been refactored and renamed to Product Management Service   
->>>>>>> Test2
-=======
-# This project has been refactored and renamed to Product Management Service   
->>>>>>> coolfeature
 A CRUD product management service to manage products and product options
->>>>>>> Test1
 
 # Steps
 
