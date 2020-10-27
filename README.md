@@ -1,6 +1,6 @@
 
 # This project has been refactored and renamed to Product Management Service
-A CRUD product management service to manage products and product optionss
+A CRUD product management service to manage products and product optionsss
 
 # Steps
 
